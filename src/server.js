@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const professorRouter = require('./professor/professorRouter');
+const professorRouter = require('./routes/professor/professorRouter');
 
 const app = express();
 
