@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 router.get("/", (req, res) => {
-  res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/chatList.html");
+  res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/chat.html");
 });
 
 

@@ -42,19 +42,19 @@ io.on("connection", function (socket) {
       return false;
     }
 
-    sendId = data.sendId; // 클라이언트에서 전달받은 닉네임
-    const receiveId = data.receiveId; // 채팅할 대상의 ID
+    sendId = data; // 클라이언트에서 전달받은 닉네임
+    // const receiveId = data.receiveId; // 채팅할 대상의 ID
 
     // 채팅방 생성 또는 조회
-    chatRoomId = await chattingController.createRoom(userId, recipientId);
+    // chatRoomId = await chattingController.createRoom(userId, recipientId);
 
-    if (!chatRoomId) {
-      console.error("채팅방 생성 실패");
-      return;
-    }
+    // if (!chatRoomId) {
+    //   console.error("채팅방 생성 실패");
+    //   return;
+    // }
 
     joinedClient = true;
-    console.log(`Chat Room ID: ${chatRoomId}`);
+    // console.log(`Chat Room ID: ${chatRoomId}`);
   });
 
 
@@ -63,11 +63,12 @@ io.on("connection", function (socket) {
   socket.on("msg", async function (data) {
     console.log(`msg: ${data}`);
 
-    chattingController.postMessage(chatRoomId, sendId, data);
+    // chattingController.postMessage(chatRoomId, sendId, data);
 
     // 클라이언트에게 메시지 전송
     io.emit("msg", {
-      msg: data.message,
+      nickname:sendId,
+      msg: data,
     });
   });
 
@@ -80,6 +81,6 @@ io.on("connection", function (socket) {
       return false;
     }
 
-    console.log(`User ${nickname} disconnected`);
+    console.log(`User ${sendId} disconnected`);
   });
 });

@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,7 +12,10 @@
       <h3>닉네임을 입력하세요.</h3>
       <input id="nickname" /><button id="joinBtn">JOIN</button>
     </div>
-
+    <ul id="message"></ul>
+    <form id="chatForm" class="hidden">
+      <input id="content" autocomplete="off" /><button>전송</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
@@ -82,4 +85,4 @@
       });
     </script>
   </body>
-</html> -->
+</html>
