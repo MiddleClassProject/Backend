@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Review Page</h1>
+    <div id="reviewContainer"></div>
+
+    <script src="like.js"></script>
+    <script>
+        async function fetchReviews() {
+            try {
+                const response = await fetch('/reviews');
+                const reviews = await response.json();
+                const container = document.getElementById('reviewContainer');
+                
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.classList.add('review-item');
+                    reviewElement.innerHTML = `
+                        <p>${review.content}</p>
+                        <div class="review-footer">
+                            <span class="like-button" data-review-id="${review.id}">👍</span>
+                            <span class="like-count">Likes: ${review.likes}</span>
+                        </div>
+                    `;
+                    container.appendChild(reviewElement);
+                });
+            } catch (error) {
+                console.error("Failed to fetch reviews:", error);
+            }
+        }
+
+        fetchReviews();
+    </script>
+</body>
+</html>
+
+
+
