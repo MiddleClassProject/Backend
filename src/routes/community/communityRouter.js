@@ -17,4 +17,7 @@ router.patch('/:id', communityController.communityModify);
 // 커뮤니티 글 삭제
 router.delete('/:id', communityController.communityDelete);
 
+// 커뮤니티 좋아요 토글
+router.post('/:id/like', communityController.toggleLike);
+
 module.exports = router;

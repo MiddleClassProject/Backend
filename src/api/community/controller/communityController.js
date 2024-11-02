@@ -23,7 +23,7 @@ const communityUpload = (req, res) => {
         });
     }
 
-    communityService.uploadCommunity(userId, req, res);
+    communityService.uploadByUserId(userId, req, res);
 };
 
 // 커뮤니티 글 수정
@@ -46,7 +46,7 @@ const communityModify = (req, res) => {
         });
     }
 
-    communityService.updateCommunity(communityId, req, res);
+    communityService.updateById(communityId, req, res);
 };
 
 // 커뮤니티 글 삭제
@@ -61,8 +61,29 @@ const communityDelete = (req, res) => {
         });
     }
 
-    communityService.deleteCommunity(communityId, req, res);
+    communityService.deleteById(communityId, req, res);
 }
 
+// 커뮤니티 좋아요 토글 (추가/취소)
+const toggleLike = async (req, res) => {
+    // todo: 로그인한 사용자의 id
+    const communityId = req.params.id;
 
-module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete }
+    try {
+        const isLiked = await communityService.toggleLike(userId, communityId);
+        res.status(200).send({
+            success: true,
+            message: isLiked ? "좋아요를 추가했습니다." : "좋아요를 취소했습니다."
+        });
+    } catch (error) {
+        console.error("좋아요 처리 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "좋아요 처리 중 에러가 발생했습니다. 나중에 다시 시도해주세요."
+        });
+    }
+
+};
+
+
+module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete, toggleLike }

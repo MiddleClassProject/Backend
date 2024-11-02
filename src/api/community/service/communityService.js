@@ -71,7 +71,7 @@ const findById = async (userId, communityId, res) => {
 }
 
 // 커뮤니티 글쓰기
-const uploadCommunity = async (userId, req, res) => {
+const uploadByUserId = async (userId, req, res) => {
     let sql = `INSERT INTO community(community_title, community_content, cus_id, created_at) 
                     VALUES (?, ?, ?, NOW())`;
     try {
@@ -94,7 +94,7 @@ const uploadCommunity = async (userId, req, res) => {
 }
 
 // 커뮤니티 글 수정
-const updateCommunity = async (communityId, req, res) => {
+const updateById = async (communityId, req, res) => {
     let sql = `UPDATE community 
                 SET community_title = ?, community_content = ? 
                 WHERE community_id = ?`;
@@ -120,7 +120,7 @@ const updateCommunity = async (communityId, req, res) => {
 
 
 // 커뮤니티 글 삭제
-const deleteCommunity = async (communityId, req, res) => {
+const deleteById = async (communityId, req, res) => {
     let sql = `DELETE FROM community
                 WHERE community_id = ?`;
 
@@ -143,4 +143,25 @@ const deleteCommunity = async (communityId, req, res) => {
     }
 }
 
-module.exports = { findAll, findById, uploadCommunity, updateCommunity, deleteCommunity }
+// 좋아요 토글 (추가/취소)
+const toggleLike = async (userId, communityId) => {
+    const checkSql = `SELECT * 
+                        FROM likes 
+                        WHERE cus_id = ? AND community_id = ?`;
+    const insertSql = `INSERT INTO likes (cus_id, community_id) 
+                        VALUES (?, ?)`;
+    const deleteSql = `DELETE FROM likes 
+                        WHERE cus_id = ? AND community_id = ?`;
+
+    const [like] = await pool.query(checkSql, [userId, communityId]);
+
+    if (like.length > 0) {
+        await pool.query(deleteSql, [userId, communityId]);
+        return false;
+    } else {
+        await pool.query(insertSql, [userId, communityId]);
+        return true;
+    }
+};
+
+module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, toggleLike }
