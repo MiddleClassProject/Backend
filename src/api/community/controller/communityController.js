@@ -23,12 +23,14 @@ const communityUpload = (req, res) => {
         });
     }
 
-    communityService.upload(userId, req, res);
+    communityService.uploadCommunity(userId, req, res);
 };
 
 // 커뮤니티 글 수정
 const communityModify = (req, res) => {
     // todo: 로그인한 사용자의 id
+
+    let communityId = req.params.id;
 
     if (!req.body.title || !req.body.content) {
         return res.status(400).send({
@@ -44,9 +46,23 @@ const communityModify = (req, res) => {
         });
     }
 
-    communityService.update(req, res);
+    communityService.updateCommunity(communityId, req, res);
 };
 
 // 커뮤니티 글 삭제
+const communityDelete = (req, res) => {
+    // todo: 로그인한 사용자의 id
+    let communityId = req.params.id;
 
-module.exports = { communityList, communityDetail, communityUpload, communityModify }
+    if (req.body.cusId !== userId) {
+        return res.status(403).send({
+            success: false,
+            message: "글을 삭제할 권한이 없습니다."
+        });
+    }
+
+    communityService.deleteCommunity(communityId, req, res);
+}
+
+
+module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete }

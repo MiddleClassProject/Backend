@@ -15,6 +15,6 @@ router.post('/upload', communityController.communityUpload);
 router.patch('/:id', communityController.communityModify);
 
 // 커뮤니티 글 삭제
-router.delete('/:id');
+router.delete('/:id', communityController.communityDelete);
 
 module.exports = router;

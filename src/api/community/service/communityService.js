@@ -71,7 +71,7 @@ const findById = async (userId, communityId, res) => {
 }
 
 // 커뮤니티 글쓰기
-const upload = async (userId, req, res) => {
+const uploadCommunity = async (userId, req, res) => {
     let sql = `INSERT INTO community(community_title, community_content, cus_id, created_at) 
                     VALUES (?, ?, ?, NOW())`;
     try {
@@ -94,13 +94,13 @@ const upload = async (userId, req, res) => {
 }
 
 // 커뮤니티 글 수정
-const update = async (req, res) => {
+const updateCommunity = async (communityId, req, res) => {
     let sql = `UPDATE community 
                 SET community_title = ?, community_content = ? 
                 WHERE community_id = ?`;
 
     try {
-        const [result] = await pool.query(sql, [req.body.title, req.body.content, req.body.communityId]);
+        const [result] = await pool.query(sql, [req.body.title, req.body.content, communityId]);
 
         console.log(result);
 
@@ -120,6 +120,27 @@ const update = async (req, res) => {
 
 
 // 커뮤니티 글 삭제
+const deleteCommunity = async (communityId, req, res) => {
+    let sql = `DELETE FROM community
+                WHERE community_id = ?`;
 
+    try {
+        const [result] = await pool.query(sql, [communityId]);
 
-module.exports = { findAll, findById, upload, update }
+        console.log(result);
+
+        res.status(200).send({
+            success: true,
+            message: "글이 삭제되었습니다."
+        });
+
+    } catch (error) {
+        console.error("커뮤니티 글 삭제 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "커뮤니티 글 삭제 중 에러 발생. 나중에 다시 시도해주세요."
+        });
+    }
+}
+
+module.exports = { findAll, findById, uploadCommunity, updateCommunity, deleteCommunity }
