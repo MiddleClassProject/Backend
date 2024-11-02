@@ -12,7 +12,7 @@ router.get('/:id', communityController.communityDetail);
 router.post('/upload', communityController.communityUpload);
 
 // 커뮤니티 글 수정
-router.patch('/:id');
+router.patch('/:id', communityController.communityModify);
 
 // 커뮤니티 글 삭제
 router.delete('/:id');

@@ -27,7 +27,26 @@ const communityUpload = (req, res) => {
 };
 
 // 커뮤니티 글 수정
+const communityModify = (req, res) => {
+    // todo: 로그인한 사용자의 id
+
+    if (!req.body.title || !req.body.content) {
+        return res.status(400).send({
+            success: false,
+            message: "제목 또는 내용을 작성해주세요."
+        });
+    }
+
+    if (req.body.cusId !== userId) {
+        return res.status(403).send({
+            success: false,
+            message: "글을 수정할 권한이 없습니다."
+        });
+    }
+
+    communityService.update(req, res);
+};
 
 // 커뮤니티 글 삭제
 
-module.exports = { communityList, communityDetail, communityUpload }
+module.exports = { communityList, communityDetail, communityUpload, communityModify }
