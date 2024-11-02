@@ -9,7 +9,7 @@ router.get('/', communityController.communityList);
 router.get('/:id', communityController.communityDetail);
 
 // 커뮤니티 글쓰기
-router.post('/upload');
+router.post('/upload', communityController.communityUpload);
 
 // 커뮤니티 글 수정
 router.patch('/:id');

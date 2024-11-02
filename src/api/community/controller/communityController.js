@@ -14,19 +14,20 @@ const communityDetail = (req, res) => {
 
 // 커뮤니티 글쓰기
 const communityUpload = (req, res) => {
+    // todo: 로그인한 사용자의 id
 
-    if (req.body.title == null || req.body.content == null) {
-        res.status(400).send({
+    if (!req.body.title || !req.body.content) {
+        return res.status(400).send({
             success: false,
-            message: "제목과 본문은 빈칸일 수 없습니다."
+            message: "제목 또는 내용을 작성해주세요."
         });
     }
 
-    communityService.upload(req, res);
+    communityService.upload(userId, req, res);
 };
 
 // 커뮤니티 글 수정
 
 // 커뮤니티 글 삭제
 
-module.exports = { communityList, communityDetail }
+module.exports = { communityList, communityDetail, communityUpload }

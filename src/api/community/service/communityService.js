@@ -71,7 +71,27 @@ const findById = async (userId, communityId, res) => {
 }
 
 // 커뮤니티 글쓰기
+const upload = async (userId, req, res) => {
+    let sql = `INSERT INTO community(community_title, community_content, cus_id, created_at) 
+                    VALUES (?, ?, ?, NOW())`;
+    try {
+        const [result] = await pool.query(sql, [req.body.title, req.body.content, userId]);
 
+        console.log(result);
+
+        res.status(200).send({
+            success: true,
+            message: "글이 등록되었습니다."
+        });
+
+    } catch (error) {
+        console.error("커뮤니티 글 저장 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "커뮤니티 글 저장 중 에러 발생. 나중에 다시 시도해주세요."
+        });
+    }
+}
 
 // 커뮤니티 글 수정
 
@@ -79,4 +99,4 @@ const findById = async (userId, communityId, res) => {
 // 커뮤니티 글 삭제
 
 
-module.exports = { findAll, findById }
+module.exports = { findAll, findById, upload }
