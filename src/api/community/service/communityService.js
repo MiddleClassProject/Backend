@@ -146,11 +146,11 @@ const deleteById = async (communityId, req, res) => {
 // 좋아요 토글 (추가/취소)
 const toggleLike = async (userId, communityId) => {
     const checkSql = `SELECT * 
-                        FROM likes 
+                        FROM like 
                         WHERE cus_id = ? AND community_id = ?`;
-    const insertSql = `INSERT INTO likes (cus_id, community_id) 
+    const insertSql = `INSERT INTO like (cus_id, community_id) 
                         VALUES (?, ?)`;
-    const deleteSql = `DELETE FROM likes 
+    const deleteSql = `DELETE FROM like 
                         WHERE cus_id = ? AND community_id = ?`;
 
     const [like] = await pool.query(checkSql, [userId, communityId]);

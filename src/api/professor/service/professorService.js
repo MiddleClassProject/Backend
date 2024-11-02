@@ -93,4 +93,25 @@ const deleteById = async (professorId, res) => {
     }
 }
 
-module.exports = { findAll, findById, deleteById }
+// 즐겨찾기 토글 (추가/취소)
+const toggleStar = async (userId, professorId) => {
+    const checkSql = `SELECT * 
+                        FROM star 
+                        WHERE cus_id = ? AND pro_id = ?`;
+    const insertSql = `INSERT INTO star (cus_id, pro_id) 
+                        VALUES (?, ?)`;
+    const deleteSql = `DELETE FROM star 
+                        WHERE cus_id = ? AND pro_id = ?`;
+
+    const [star] = await pool.query(checkSql, [userId, professorId]);
+
+    if (star.length > 0) {
+        await pool.query(deleteSql, [userId, professorId]);
+        return false;
+    } else {
+        await pool.query(insertSql, [userId, professorId]);
+        return true;
+    }
+};
+
+module.exports = { findAll, findById, deleteById, toggleStar }
