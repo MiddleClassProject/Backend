@@ -69,21 +69,17 @@ const toggleLike = async (req, res) => {
     // todo: 로그인한 사용자의 id
     const communityId = req.params.id;
 
-    try {
-        const isLiked = await communityService.toggleLike(userId, communityId);
-        res.status(200).send({
-            success: true,
-            message: isLiked ? "좋아요를 추가했습니다." : "좋아요를 취소했습니다."
-        });
-    } catch (error) {
-        console.error("좋아요 처리 중 에러 발생:", error);
-        res.status(500).send({
-            success: false,
-            message: "좋아요 처리 중 에러가 발생했습니다. 나중에 다시 시도해주세요."
-        });
-    }
+    communityService.toggleLike(userId, communityId, res);
+};
 
+// 커뮤니티 댓글 작성
+const createComment = async (req, res) => {
+    // todo: 로그인한 사용자의 id
+    const communityId = req.params.id;
+    const content = req.body.content;
+
+    communityService.createComment(userId, communityId, content, res, null);
 };
 
 
-module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete, toggleLike }
+module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete, toggleLike, createComment }

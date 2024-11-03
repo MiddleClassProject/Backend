@@ -20,4 +20,13 @@ router.delete('/:id', communityController.communityDelete);
 // 커뮤니티 좋아요 토글
 router.post('/:id/like', communityController.toggleLike);
 
+// 커뮤니티 댓글 작성
+router.post('/:id/comments', communityController.createComment);
+
+// 커뮤니티 댓글 삭제
+router.delete('/:id/comments/:commentId');
+
+// 커뮤니티 대댓글 작성
+router.post('/:id/comments/:commentId/');
+
 module.exports = router;

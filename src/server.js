@@ -11,7 +11,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-app.use("/professor", professorRouter);
+app.use("/professors", professorRouter);
 app.use("/community", communityRouter);
 
 app.get("/", (req, res) => {
