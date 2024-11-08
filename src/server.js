@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+
+const professorRouter = require('./routes/professor/professorRouter');
+const communityRouter = require('./routes/community/communityRouter');
 const chatRouter = require('./routes/charttingRoute');
 const http = require("http");
 const socketIO = require("socket.io");
@@ -11,6 +14,12 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
+app.use("/professors", professorRouter);
+app.use("/community", communityRouter);
+
+app.get("/", (req, res) => {
+  res.send("Hello world!");
+})
 
 app.use("/chat", chatRouter);
 
@@ -22,7 +31,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 server.listen(3000, () => {
-    console.log("Server가 실행 중 입니다. 포트번호는 3000번 입니다.");
+  console.log("Server가 실행 중 입니다. 포트번호는 3000번 입니다.");
 });
 
 
@@ -67,7 +76,7 @@ io.on("connection", function (socket) {
 
     // 클라이언트에게 메시지 전송
     io.emit("msg", {
-      nickname:sendId,
+      nickname: sendId,
       msg: data,
     });
   });
