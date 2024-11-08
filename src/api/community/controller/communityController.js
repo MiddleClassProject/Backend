@@ -7,14 +7,14 @@ const communityList = (req, res) => {
 
 // 커뮤니티 상세보기
 const communityDetail = (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.userId;
     let communityId = req.params.id;
     communityService.findById(userId, communityId, res);
 };
 
 // 커뮤니티 글쓰기
 const communityUpload = (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.userId;
 
     if (!req.body.title || !req.body.content) {
         return res.status(400).send({
@@ -28,8 +28,7 @@ const communityUpload = (req, res) => {
 
 // 커뮤니티 글 수정
 const communityModify = (req, res) => {
-    // todo: 로그인한 사용자의 id
-
+    const userId = req.body.userId;
     let communityId = req.params.id;
 
     if (!req.body.title || !req.body.content) {
@@ -51,7 +50,7 @@ const communityModify = (req, res) => {
 
 // 커뮤니티 글 삭제
 const communityDelete = (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.userId;
     let communityId = req.params.id;
 
     if (req.body.cusId !== userId) {
@@ -66,7 +65,7 @@ const communityDelete = (req, res) => {
 
 // 커뮤니티 좋아요 토글 (추가/취소)
 const toggleLike = async (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.userId;
     const communityId = req.params.id;
 
     communityService.toggleLike(userId, communityId, res);
@@ -74,7 +73,7 @@ const toggleLike = async (req, res) => {
 
 // 커뮤니티 댓글 작성
 const createComment = async (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.userId;
     const communityId = req.params.id;
     const content = req.body.content;
 

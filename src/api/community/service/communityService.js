@@ -3,7 +3,7 @@ const pool = require('../../../../config/databaseSet');
 // 커뮤니티 목록보기 
 const findAll = async (res) => {
 
-    let sql = `SELECT community_id, community_title, community_user, created_at 
+    let sql = `SELECT community_id, community_title, cus_id, created_at 
                 FROM community`;
 
     try {
@@ -36,7 +36,7 @@ const findAll = async (res) => {
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
-    let sql = `SELECT community_id, community_title, community_user, community_content, created_at, 
+    let sql = `SELECT community_id, community_title, cus_id, community_content, created_at, 
                 CASE WHEN l.user_id IS NOT NULL THEN true ELSE false END AS is_like
                 FROM community c
                 LEFT JOIN like l ON c.community_id = l.community_id AND l.user_id = ? 
