@@ -37,12 +37,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 
 app.use('/public', express.static(path.join(__dirname, '../public')));
-<<<<<<< HEAD
+app.use("/view", express.static(path.join(__dirname, "view")));
 app.use("/professors", professorRouter);
-=======
-app.use("/view", express.static(path.join(__dirname, "view"))); 
-app.use("/professor", professorRouter);
->>>>>>> b973812b0676b7b0665d0f73892188fa5a533f89
 app.use("/community", communityRouter);
 
 
