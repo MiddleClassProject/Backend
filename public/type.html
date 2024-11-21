@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>역할 선택</title>
+    <link rel="stylesheet" href="/public/css/type.css">
+</head>
+<body>
+    <div class="container">
+        <h1>역할을 선택하세요</h1>
+        <div class="button-container">
+            <button onclick="selectRole('고객')">고객</button>
+            <button onclick="selectRole('교수')">교수</button>
+        </div>
+    </div>
+
+    <script>
+        function selectRole(role) {
+
+    
+            if (role === '고객') {
+                // 고객일 경우 회원가입 페이지로 리다이렉트
+                window.location.href = '/public/cus.html';  // 회원가입 페이지로 이동 
+            } 
+            else if (role === '교수') {
+                window.location.href = '/public/pro.html';
+            }
+        }
+    </script>
+    
+</body>
+</html>
