@@ -37,8 +37,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 
 app.use('/public', express.static(path.join(__dirname, '../public')));
+app.use("/view", express.static(path.join(__dirname, "view"))); 
 app.use("/professor", professorRouter);
 app.use("/community", communityRouter);
+
 
 //정인
 app.use("/routes", authRouter);
@@ -51,7 +53,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 })
 
-app.use("/chat", chatRouter);
+
 
 
 
