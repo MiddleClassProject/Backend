@@ -34,6 +34,31 @@ const findAll = async (res) => {
     }
 }
 
+// 댓글 -> 트리 구조 변환 함수
+function nestComments(comments) {
+    const commentMap = new Map();
+
+    // 모든 댓글을 Map에 저장
+    comments.forEach(comment => {
+        commentMap.set(comment.comment_id, { ...comment, children: [] });
+    });
+
+    const nestedComments = [];
+    comments.forEach(comment => {
+        if (comment.parent_id === null) {
+            nestedComments.push(commentMap.get(comment.comment_id)); // 최상위 댓글
+        } else {
+            // 대댓글 -> 부모의 children 배열에 추가
+            const parent = commentMap.get(comment.parent_id);
+            if (parent) {
+                parent.children.push(commentMap.get(comment.comment_id));
+            }
+        }
+    });
+
+    return nestedComments;
+}
+
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
     let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, 
@@ -65,6 +90,9 @@ const findById = async (userId, communityId, res) => {
 
         const [comments] = await pool.query(sql2, [communityId]);
 
+        // 댓글 트리 구성
+        const nestedComments = nestComments(comments);
+
         const result = {
             community_id: community.community_id,
             community_title: community.community_title,
@@ -73,13 +101,7 @@ const findById = async (userId, communityId, res) => {
             created_at: community.created_at,
             is_like: community.is_like,
             likes: community.likes,
-            comments: comments.map((comment) => ({
-                comment_id: comment.comment_id,
-                content: comment.content,
-                comment_cus_id: comment.cus_id,
-                parent_id: comment.parent_id,
-                created_at: comment.created_at,
-            }))
+            comments: nestedComments
         };
 
         res.status(200).send({
@@ -208,7 +230,7 @@ const toggleLike = async (userId, communityId, res) => {
 };
 
 // 커뮤니티 댓글 및 대댓글 작성
-const createComment = async (userId, communityId, content, res, parentId = null) => {
+const createComment = async (userId, communityId, content, parentId, res) => {
 
     const sql = `INSERT INTO comment (community_id, cus_id, parent_id, content, created_at) 
     VALUES (?, ?, ?, ?, NOW())`;
@@ -243,4 +265,28 @@ const createComment = async (userId, communityId, content, res, parentId = null)
 
 };
 
-module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, toggleLike, createComment }
+// 커뮤니티 댓글 삭제
+const deleteComment = async (commentId, res) => {
+    let sql = `DELETE FROM comment
+                WHERE comment_id = ?`;
+
+    try {
+        const [result] = await pool.query(sql, [commentId]);
+
+        console.log(result);
+
+        res.status(200).send({
+            success: true,
+            message: "댓글이 삭제되었습니다."
+        });
+
+    } catch (error) {
+        console.error("커뮤니티 댓글 삭제 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "커뮤니티 댓글 삭제 중 에러 발생. 나중에 다시 시도해주세요."
+        });
+    }
+}
+
+module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, toggleLike, createComment, deleteComment }
