@@ -36,25 +36,51 @@ const findAll = async (res) => {
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
-    let sql = `SELECT c.community_id, c.community_title, c.cus_id, c.community_content, c.created_at, 
-                CASE WHEN l.cus_id IS NOT NULL THEN true ELSE false END AS is_like
+    let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, 
+                c.community_content, c.created_at,
+                CASE WHEN EXISTS (
+                    SELECT 1 
+                    FROM \`like\` l 
+                    WHERE l.community_id = c.community_id AND l.cus_id = ?
+                ) THEN true ELSE false END AS is_like,
+                (SELECT COUNT(*) FROM \`like\` l WHERE l.community_id = c.community_id) AS likes
                 FROM community c
-                LEFT JOIN \`like\` l ON c.community_id = l.community_id AND l.cus_id = ?
                 WHERE c.community_id = ?;`;
-
-    // todo: 댓글
+    let sql2 = `SELECT comment_id, content, cus_id, parent_id, created_at
+                FROM comment
+                WHERE community_id = ?
+                ORDER BY parent_id ASC, created_at ASC;`;
 
     try {
-        const [result] = await pool.query(sql, [userId, communityId]);
+        const [sql1Result] = await pool.query(sql1, [userId, communityId]);
 
-        if (result.length === 0) {
+        if (sql1Result.length === 0) {
             return res.status(404).send({
                 success: false,
                 message: "해당 글을 찾을 수 없습니다."
             });
         }
 
-        console.log(result);
+        const community = sql1Result[0];
+
+        const [comments] = await pool.query(sql2, [communityId]);
+
+        const result = {
+            community_id: community.community_id,
+            community_title: community.community_title,
+            community_cus_id: community.cus_id,
+            community_content: community.community_content,
+            created_at: community.created_at,
+            is_like: community.is_like,
+            likes: community.likes,
+            comments: comments.map((comment) => ({
+                comment_id: comment.comment_id,
+                content: comment.content,
+                comment_cus_id: comment.cus_id,
+                parent_id: comment.parent_id,
+                created_at: comment.created_at,
+            }))
+        };
 
         res.status(200).send({
             success: true,
