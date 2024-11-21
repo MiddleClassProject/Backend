@@ -7,7 +7,13 @@ const communityList = (req, res) => {
 
 // 커뮤니티 상세보기
 const communityDetail = (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
+    if (!userId) {
+        return res.status(401).send({
+            success: false,
+            message: "로그인이 필요한 페이지입니다."
+        });
+    }
     let communityId = req.params.id;
     communityService.findById(userId, communityId, res);
 };
@@ -28,7 +34,7 @@ const communityUpload = (req, res) => {
 
 // 커뮤니티 글 수정
 const communityModify = (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     let communityId = req.params.id;
 
     if (!req.body.title || !req.body.content) {
@@ -50,7 +56,7 @@ const communityModify = (req, res) => {
 
 // 커뮤니티 글 삭제
 const communityDelete = (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     let communityId = req.params.id;
 
     if (req.body.cusId !== userId) {
@@ -65,7 +71,7 @@ const communityDelete = (req, res) => {
 
 // 커뮤니티 좋아요 토글 (추가/취소)
 const toggleLike = async (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     const communityId = req.params.id;
 
     communityService.toggleLike(userId, communityId, res);
@@ -73,7 +79,7 @@ const toggleLike = async (req, res) => {
 
 // 커뮤니티 댓글 작성
 const createComment = async (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     const communityId = req.params.id;
     const content = req.body.content;
 

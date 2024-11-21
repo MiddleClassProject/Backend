@@ -36,13 +36,13 @@ const findAll = async (res) => {
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
-    let sql = `SELECT community_id, community_title, cus_id, community_content, created_at, 
-                CASE WHEN l.user_id IS NOT NULL THEN true ELSE false END AS is_like
+    let sql = `SELECT c.community_id, c.community_title, c.cus_id, c.community_content, c.created_at, 
+                CASE WHEN l.cus_id IS NOT NULL THEN true ELSE false END AS is_like
                 FROM community c
-                LEFT JOIN like l ON c.community_id = l.community_id AND l.user_id = ? 
-                WHERE c.community_id = ?`;
+                LEFT JOIN \`like\` l ON c.community_id = l.community_id AND l.cus_id = ?
+                WHERE c.community_id = ?;`;
 
-    // todo: 댓글, 좋아요
+    // todo: 댓글
 
     try {
         const [result] = await pool.query(sql, [userId, communityId]);
@@ -146,11 +146,11 @@ const deleteById = async (communityId, req, res) => {
 // 좋아요 토글 (추가/취소)
 const toggleLike = async (userId, communityId, res) => {
     const checkSql = `SELECT * 
-                        FROM like 
+                        FROM \`like\` 
                         WHERE cus_id = ? AND community_id = ?`;
-    const insertSql = `INSERT INTO like (cus_id, community_id) 
-                        VALUES (?, ?)`;
-    const deleteSql = `DELETE FROM like 
+    const insertSql = `INSERT INTO \`like\` (cus_id, community_id, created_at) 
+                        VALUES (?, ?, NOW())`;
+    const deleteSql = `DELETE FROM \`like\` 
                         WHERE cus_id = ? AND community_id = ?`;
 
     try {
@@ -184,7 +184,7 @@ const toggleLike = async (userId, communityId, res) => {
 // 커뮤니티 댓글 및 대댓글 작성
 const createComment = async (userId, communityId, content, res, parentId = null) => {
 
-    const sql = `INSERT INTO comments (community_id, cus_id, parent_id, content, created_at) 
+    const sql = `INSERT INTO comment (community_id, cus_id, parent_id, content, created_at) 
     VALUES (?, ?, ?, ?, NOW())`;
 
     try {
