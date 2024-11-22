@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const communityController = require('../../api/community/controller/communityController');
 
+
 // 커뮤니티 목록보기
 router.get('/', communityController.communityList);
 
