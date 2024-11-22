@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const communityController = require('../../api/community/controller/communityController');
 
+
 // 커뮤니티 목록보기
 router.get('/', communityController.communityList);
 
@@ -24,9 +25,6 @@ router.post('/:id/like', communityController.toggleLike);
 router.post('/:id/comments', communityController.createComment);
 
 // 커뮤니티 댓글 삭제
-router.delete('/:id/comments/:commentId');
-
-// 커뮤니티 대댓글 작성
-router.post('/:id/comments/:commentId/');
+router.delete('/:id/comments/:commentId', communityController.deleteComment);
 
 module.exports = router;
