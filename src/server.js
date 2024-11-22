@@ -6,7 +6,9 @@ const multer = require('multer');
 const path = require('path') // 서브 디렉토리 'public' 사용 위한 경로 패키지
 const static = require('serve-static') // serve.js 경로 설정
 const cookieParser = require('cookie-parser'); //쿠키 모듈
+
 const mysql = require('mysql2');
+
 const pool = require('../config/databaseSet');
 
 
@@ -14,23 +16,25 @@ const pool = require('../config/databaseSet');
 const professorRouter = require('./routes/professor/professorRouter');
 const communityRouter = require('./routes/community/communityRouter');
 const chatRouter = require('./routes/charttingRoute');
+
 const reviewRouter = require('../review/routes/reviewRouter'); 
+
 // 정인 라우터 추가
-const authRouter = require('../public/routes/authRouter');
-const cusRouter = require('../public/routes/cusRouter');
-const proRouter = require('../public/routes/proRouter');
+const authRouter = require('../public/routes/authRouter')
+const cusRouter = require('../public/routes/cusRouter')
+const proRouter = require('../public/routes/proRouter')
 
 const http = require("http");
 const socketIO = require("socket.io");
 const app = express();
 const chattingController = require('./api/chatting/controller/chattingController');
+
 const reviewController = require('../review/controller/reviewController');
 
 //정인 컨트롤러 추가
-const authoController = require('../public/api/authController');
+const authController = require('../public/api/authController');
 const cusController = require('../public/api/cusController');
 const proController = require('../public/api/proController');
-
 
 
 dotenv.config();
@@ -41,18 +45,25 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 
 app.use('/public', express.static(path.join(__dirname, '../public')));
+
 app.use('/review', express.static(path.join(__dirname, '../review')));
 app.use('/images', express.static(path.join(__dirname, '../images')));
+
+//app.use('/view', express.static(path.join(__dirname, '../view')));
+
+app.use("/view", express.static(path.join(__dirname, "view"))); 
 app.use("/professor", professorRouter);
 app.use("/community", communityRouter);
-app.use('/view', express.static(path.join(__dirname, '../view')));
+
 
 //정인
 app.use("/routes", authRouter);
 app.use("/routes", cusRouter);
 app.use("/routes", proRouter);
+
 //현성
 app.use("/api/review", reviewRouter); 
+
 
 
 app.get("/", (req, res) => {
@@ -60,6 +71,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/chat", chatRouter);
+
 
 
 

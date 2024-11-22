@@ -11,6 +11,7 @@ const login = async (req, res) => {
 
         if (rows.length > 0) {
             res.cookie('user_id', paramId, { maxAge: 900000, httpOnly: true });
+
             // 로그인 성공 시 리디렉션
             res.redirect('../../review/reviewList.html'); // '/dashboard'는 리디렉션할 경로입니다. 필요에 따라 수정하세요.
         } else {

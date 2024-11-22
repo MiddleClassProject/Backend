@@ -51,7 +51,9 @@ const register = async (req, res) => {
 
         await conn.query('INSERT INTO users (user_id, user_type) VALUES (?, ?)', [paramId, 'pro']);
         await conn.query('INSERT INTO pro (pro_id, pro_name, pro_age, pro_password, pro_path, pro_check) VALUES (?, ?, ?, ?, ?, ?)', [paramId, paramName, paramAge, paramPassword, paramPath, false]);
+
         await conn.query('INSERT INTO reviewdata (pro_name) VALUES (?)', [paramName]);
+
         conn.release();
 
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
