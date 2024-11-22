@@ -11,12 +11,12 @@ const login = async (req, res) => {
 
         if (rows.length > 0) {
             res.cookie('user_id', paramId, { maxAge: 900000, httpOnly: true });
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
-            res.write('<h2>로그인 성공</h2>');
-            res.end();
+
+            // 로그인 성공 시 리디렉션
+            res.redirect('../../review/reviewList.html'); // '/dashboard'는 리디렉션할 경로입니다. 필요에 따라 수정하세요.
         } else {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
-            res.write('<h2>로그인 실패, 아이디와 패스워드를 확인하세요.</h2>');
+            res.writeHead(401, { 'Content-Type': 'text/html; charset=utf8' });
+            res.write('<h2>로그인 실패: 잘못된 ID 또는 비밀번호</h2>');
             res.end();
         }
     } catch (err) {
