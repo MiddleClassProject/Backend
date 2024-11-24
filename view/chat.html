@@ -14,16 +14,39 @@
       <h3>닉네임을 입력하세요.</h3>
       <input id="nickname" /><button id="joinBtn">JOIN</button>
     </div>
-    <ul id="message"></ul>
-    <form id="chatForm" class="hidden">
-      <input id="content" autocomplete="off" /><button>전송</button>
-    </form>
+    <div id="msg_container">
+      <ul id="message"></ul>
+    </div>
+    <div id="chat_container">
+      <form id="chatForm" class="hidden">
+        <input id="content" autocomplete="off" /><button>전송</button>
+      </form>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var nickname;
       var socket = io();
 
+      //쿠키에서 값을 가져오기
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+      }
+
+      // 'user'라는 이름의 쿠키 값 가져오기
+      const userCookie = getCookie('user_id');
+      if (userCookie == null) {
+          // 닉네임이 제대로 입력되지 않았다면
+          alert('로그인을 해주세요');
+          return false;
+        }
+
+        // 닉네임이 입력되었다면, 서버에 join을 요청합니다.
+      nickname = userCookie;
+      socket.emit('join', nickname);
       // join 버튼을 누르거나 닉네임 입력 후 Enter 버튼을 누르면 서버에 join을 요청합니다.
 
       // join Event 발생
@@ -40,26 +63,12 @@
 
       // 송신: 닉네임
       function enterNickname(e) {
-        if ($('#nickname').val().trim() == '') {
-          // 닉네임이 제대로 입력되지 않았다면
-          alert('닉네임을 입력하세요!');
-          return false;
-        }
-
-        // 닉네임이 입력되었다면, 서버에 join을 요청합니다.
-        nickname = $('#nickname').val().trim();
-        socket.emit('join', nickname);
+        
+        
       }
 
       // 수신: 신규 클라이언트 접속
       // 수정해야 할 것: 채팅 발신자, 수신자의 아이디가 전부 있어야 함.
-      socket.on('join', function (data) {
-        $('#message').append(
-          $('<li class = "notification">').text(
-            data.nickname + '님이 입장하셨습니다.'
-          )
-        );
-      });
 
       // 수신: 퇴장
       socket.on('left', function (data) {
@@ -82,7 +91,7 @@
       socket.on('msg', function (data) {
         console.log(nickname);
         $('#message').append(
-          data.nickname === $('#nickname').val().trim()
+          data.nickname === userCookie
             ? $('<li class = "me">').append(
                 $('<span class="msg">').text(data.msg)
               )

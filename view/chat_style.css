@@ -1,20 +1,27 @@
-<style>
+
 * {
   box-sizing: border-box;
   margin: 0 0;
+  
 }
 body,
 html {
   font-family: Arial, sans-serif;
 }
 
-.container {
+#chat_container{
   display: flex;
-  height: 100vh;
+  justify-content: center;
 }
 
 .hidden {
   display: none;
+  width: 400px;
+}
+
+#msg_container{
+  display: flex;
+  justify-content: center;
 }
 
 #enter {
@@ -23,7 +30,8 @@ html {
 
 #message {
   height: 500px;
-  background-color: aqua;
+  background-color: #FFFEF5;
+  width:400px;
   padding: 0;
   margin: 0;
   overflow-y: auto;
@@ -46,8 +54,8 @@ html {
   max-width: 20ch;
   word-wrap: break-word;
   white-space: normal;
-  padding: 1px;
-  background-color: greenyellow;
+  padding: 7px;
+  background-color: #C9C0AE;
   color: white;
   border-radius: 5px;
 }
@@ -63,16 +71,15 @@ html {
   margin-right: 10px;
 }
 
-button {
+#chat_container button {
   padding: 10px 20px;
   border: none;
-  background-color: #4caf50;
+  background-color: #989085;
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #aef7b2;
+#chat_container button:hover {
+  background-color: #c0b5a7;
 }
-</style>

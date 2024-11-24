@@ -63,8 +63,7 @@ app.use("/routes", proRouter);
 
 //현성
 app.use("/api/review", reviewRouter); 
-
-
+app.use("/chat", express.static(path.join(__dirname, "../view"))); 
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
@@ -96,7 +95,7 @@ io.on("connection", function (socket) {
 
   // 채팅 참여 요청
   socket.on("join", async function (data) {
-    console.log(data);
+    console.log("ㅇㄹㅇ",data);
 
     if (joinedClient) {
       return false;
