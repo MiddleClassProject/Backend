@@ -1,42 +1,16 @@
-/* * {
+<style>
+* {
   box-sizing: border-box;
+  margin: 0 0;
 }
-
-body, html {
-  height: 100%;
-  margin: 0;
+body,
+html {
   font-family: Arial, sans-serif;
 }
 
 .container {
   display: flex;
   height: 100vh;
-}
-
-.chat-list {
-  width: 30%;
-  background-color: #f9f9f9;
-  border-right: 1px solid #ddd;
-  padding: 20px;
-}
-
-.chat-list ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.chat-list li {
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.chat-content {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  background-color: #ffffff;
 }
 
 .hidden {
@@ -48,13 +22,35 @@ body, html {
 }
 
 #message {
-  flex-grow: 1;
-  list-style-type: none;
+  height: 500px;
+  background-color: aqua;
   padding: 0;
   margin: 0;
   overflow-y: auto;
 }
-
+.me {
+  text-align: right;
+  display: flex;
+  justify-content: right;
+}
+.other {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.nickname {
+  width: fit-content;
+}
+.msg {
+  width: fit-content;
+  max-width: 20ch;
+  word-wrap: break-word;
+  white-space: normal;
+  padding: 1px;
+  background-color: greenyellow;
+  color: white;
+  border-radius: 5px;
+}
 #chatForm {
   display: flex;
 }
@@ -77,5 +73,6 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
-} */
+  background-color: #aef7b2;
+}
+</style>

@@ -1,11 +1,10 @@
 :root {
-    --body-bg: #c1bdba;
-    --form-bg: #13232f;
+    --body-bg: #EEEFEA;  /* 기존 #c1bdba에서 변경된 색상 */
     --white: #ffffff;
-    --main: #1ab188;
-    --main-light: #1cbb9c;
-    --main-dark: #18a383;
-    --gray-light: #a0b3b0;
+    --main: #C9C0AE;
+    --main-light: #C9C0AE;
+    --main-dark: #E7DEC5;
+    --gray-light: #ffffff;
     --gray: #ddd;
     --thin: 300;
     --normal: 400;
@@ -37,7 +36,7 @@
   }
   
   .form {
-    background: rgba(19, 35, 47, 0.9);
+    background: rgba(152, 144, 133, 0.9); /* #989085 색을 비슷한 투명도로 적용 */
     padding: 40px;
     max-width: 600px;
     margin: 40px auto;

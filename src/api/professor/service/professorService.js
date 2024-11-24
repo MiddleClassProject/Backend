@@ -3,19 +3,19 @@ const pool = require('../../../../config/databaseSet');
 // 교수 목록보기 
 const findAll = async (userId, res) => {
 
-    let professorSql = `SELECT professor_id, name FROM professor`;
-    let bookmarkSql = `SELECT professor_id FROM bookmark WHERE user_id = ?`;
+    let professorSql = `SELECT pro_id, pro_name FROM pro`;
+    let starSql = `SELECT pro_id FROM star WHERE cus_id = ?`;
 
     try {
         const [professorList] = await pool.query(professorSql);
-        const [bookmarkList] = await pool.query(bookmarkSql, [userId]);
+        const [starList] = await pool.query(starSql, [userId]);
 
-        const bookmarkedSet = new Set(bookmarkList.map(b => b.professor_id));
+        const staredSet = new Set(starList.map(s => s.pro_id));
 
         const result = professorList.map(p => ({
-            professor_id: p.professor_id,
-            name: p.name,
-            isBookmarked: bookmarkedSet.has(p.professor_id)
+            pro_id: p.pro_id,
+            pro_name: p.pro_name,
+            is_stared: staredSet.has(p.pro_id)
         }));
 
         console.log(result);
@@ -37,11 +37,11 @@ const findAll = async (userId, res) => {
 
 // 교수 상세보기
 const findById = async (userId, professorId, res) => {
-    let sql = `SELECT p.professor_id, p.name, p.detail,
-                CASE WHEN b.user_id IS NOT NULL THEN true ELSE false END AS is_favorite
-                FROM professor p
-                LEFT JOIN bookmark b ON p.professor_id = b.professor_id AND b.user_id = ?
-                WHERE p.professor_id = ?`; // todo: 조회할 항목 정리 필요 
+    let sql = `SELECT p.pro_id, p.pro_name,
+                CASE WHEN s.cus_id IS NOT NULL THEN true ELSE false END AS is_stared
+                FROM pro p
+                LEFT JOIN star s ON p.pro_id = s.pro_id AND s.cus_id = ?
+                WHERE p.pro_id = ?`; // todo: 조회할 항목 정리 필요 (교수 설명 필드 추가 필요)
 
     try {
         const [result] = await pool.query(sql, [userId, professorId]);
@@ -71,7 +71,7 @@ const findById = async (userId, professorId, res) => {
 
 // 교수 탈퇴
 const deleteById = async (professorId, res) => {
-    let sql = 'DELETE FROM professor WHERE professor_id = ?';
+    let sql = 'DELETE FROM pro WHERE pro_id = ?';
 
     try {
         const [result] = await pool.query(sql, [professorId]);
@@ -98,8 +98,8 @@ const toggleStar = async (userId, professorId) => {
     const checkSql = `SELECT * 
                         FROM star 
                         WHERE cus_id = ? AND pro_id = ?`;
-    const insertSql = `INSERT INTO star (cus_id, pro_id) 
-                        VALUES (?, ?)`;
+    const insertSql = `INSERT INTO star (cus_id, pro_id, created_at) 
+                        VALUES (?, ?, NOW())`;
     const deleteSql = `DELETE FROM star 
                         WHERE cus_id = ? AND pro_id = ?`;
 

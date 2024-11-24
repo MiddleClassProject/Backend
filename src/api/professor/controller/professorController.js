@@ -2,26 +2,26 @@ const professorService = require('../service/professorService');
 
 // 교수 목록보기
 const professorList = (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     professorService.findAll(userId, res);
 };
 
 // 교수 상세보기 
 const professorDetail = (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     let professorId = req.params.id;
     professorService.findById(userId, professorId, res);
 };
 
 // 교수 탈퇴
 const professorQuit = (req, res) => {
-    // todo: 로그인한 교수의 id 들고 오기
+    const professorId = req.params.id; // 교수 id 가져오기
     professorService.deleteById(professorId, res);
 }
 
 // 교수 즐겨찾기 토글 (추가/취소)
 const toggleStar = async (req, res) => {
-    // todo: 로그인한 사용자의 id
+    const userId = req.body.cusId; // 로그인한 회원 id 가져오기
     const professorId = req.params.id;
 
     try {

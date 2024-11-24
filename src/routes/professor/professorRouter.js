@@ -9,7 +9,7 @@ router.get('/', professorController.professorList);
 router.get('/:id', professorController.professorDetail);
 
 // 교수 탈퇴
-router.delete("/quit", professorController.professorQuit); // todo: professorId 추가 필요
+router.delete("/:id/quit", professorController.professorQuit);
 
 // 교수 즐겨찾기 토글
 router.post('/:id/star', professorController.toggleStar);
