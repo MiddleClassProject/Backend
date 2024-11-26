@@ -17,7 +17,7 @@ const professorRouter = require('./routes/professor/professorRouter');
 const communityRouter = require('./routes/community/communityRouter');
 const chatRouter = require('./routes/charttingRoute');
 
-const reviewRouter = require('../review/routes/reviewRouter'); 
+const reviewRouter = require('../review/routes/reviewRouter');
 
 // 정인 라우터 추가
 const authRouter = require('../public/routes/authRouter')
@@ -45,14 +45,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 
 app.use('/public', express.static(path.join(__dirname, '../public')));
-
 app.use('/review', express.static(path.join(__dirname, '../review')));
 app.use('/images', express.static(path.join(__dirname, '../images')));
 
 //app.use('/view', express.static(path.join(__dirname, '../view')));
 
-app.use("/view", express.static(path.join(__dirname, "view"))); 
-app.use("/professor", professorRouter);
+app.use("/view", express.static(path.join(__dirname, "view")));
+app.use("/professors", professorRouter);
 app.use("/community", communityRouter);
 
 
@@ -62,7 +61,7 @@ app.use("/routes", cusRouter);
 app.use("/routes", proRouter);
 
 //현성
-app.use("/api/review", reviewRouter); 
+app.use("/api/review", reviewRouter);
 
 
 

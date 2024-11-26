@@ -60,4 +60,17 @@ const submitReview = async (req, res) => {
     }
 };
 
-module.exports = { getProfessors, getReviewList, submitReview };
+const likeReview = async (req, res) => {
+    const { id } = req.body;
+
+    try {
+        const query = 'UPDATE review SET likes = likes + 1 WHERE id = ?';
+        await pool.query(query, [id]);
+        res.status(200).send('좋아요가 등록되었습니다.');
+    } catch (error) {
+        console.error('좋아요 등록 실패:', error);
+        res.status(500).send('서버 오류');
+    }
+};
+
+module.exports = { getProfessors, getReviewList, submitReview , likeReview };
