@@ -28,7 +28,7 @@
                         <li class="nav-item"><a class="nav-link" href="">교수님들</a></li>
                         <li class="nav-item"><a class="nav-link" href="">후기</a></li>
                         <li class="nav-item"><a class="nav-link" href="communityList.html">커뮤니티</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">마이페이지</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mypage.html">마이페이지</a></li>
                     </ul>
                 </div>
             </div>
@@ -100,14 +100,15 @@
             body: JSON.stringify({ id, password }),
         });
 
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            alert(`로그인 실패: ${errorMessage}`);
-            return;
-        }
+        const result = await response.json();
 
-        const result = await response.text(); // HTML 형식 응답 처리
-        alert(result); // 성공 메시지 출력
+        if (response.ok) {
+            alert(result.message); // 로그인 성공 메시지 표시
+            window.location.href = result.redirectUrl; // 바로 리다이렉트
+        }   
+        else {
+            alert(`로그인 실패: ${result.error}`); // 실패 메시지 표시
+        }
     } catch (err) {
         console.error('로그인 요청 오류:', err);
         alert('로그인 중 오류가 발생했습니다.');

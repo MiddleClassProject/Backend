@@ -45,14 +45,17 @@ const login = async (req, res) => {
         if (passwordRows.length > 0) {
             // 로그인 성공 처리
             res.cookie('user_id', id, { maxAge: 900000, httpOnly: true });
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
-            res.write(`<h2>${userType === 'cus' ? '고객' : '교수'} 로그인 성공</h2>`);
-            res.end();
+        
+            // 성공 메시지와 함께 이동 정보 전달
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+                message: `${userType === 'cus' ? '고객' : '교수'} 로그인 성공`,
+                redirectUrl: '/public/mypage.html'
+            }));
         } else {
             // 비밀번호 불일치
-            res.writeHead(401, { 'Content-Type': 'text/html; charset=utf8' });
-            res.write('<h2>로그인 실패: 비밀번호가 잘못되었습니다.</h2>');
-            res.end();
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: '비밀번호가 잘못되었습니다.' }));
         }
     } catch (err) {
         console.error('DB connection or query error:', err);
