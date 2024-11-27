@@ -9,14 +9,14 @@ const io = new Server(server);
 const chattingController = require('../api/chatting/controller/chattingController');
 
 router.get("/", (req, res) => {
-  res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/projects.html");
+  res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/chat.html");
 });
 
 //채팅방 목록 조회
 router.get("/list", chattingController.getChattingRoom);
 
-router.get("/detail/{room_id}", chattingController.getChatDetail);
+router.get("/detail/:room_id", chattingController.getChatDetail);
 
-router.delete("/room/{room_id}", chattingController.deleteChat);
+router.delete("/room/:room_id", chattingController.deleteChat);
 
 module.exports = router;

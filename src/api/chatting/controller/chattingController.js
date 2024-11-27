@@ -23,12 +23,12 @@ const postMessage = (room_id, sender_id, message) => {
 }
 
 //채팅방 조회
-const getChattingRoom = (req, res) => {
-    const user_id = req.body.user_id;
-
-    let result = chattingService.getChattingRoom(user_id);
-
-    if(!result){
+const getChattingRoom = async(req, res) => {
+    const user_id = req.cookies.user_id;
+    console.log(user_id);
+    let result = await chattingService.getChattingRoom(user_id);
+  
+    if(result){
         res.status(200).send({success: true, data:result});
     }else{
         res.status(500).send({success: false, message: "채팅방 목록을 조회할 수 없습니다."});
@@ -36,12 +36,12 @@ const getChattingRoom = (req, res) => {
 }
 
 //채팅 조회
-const getChatDetail = (req, res) => {
-    const room_id = req.params;
+const getChatDetail = async(req, res) => {
+    const room_id = req.params.room_id;
+    console.log(room_id+"dfsg");
+    let result = await chattingService.getChatDetail(room_id);
 
-    let result = chattingService.getChatDetail(room_id);
-
-    if(!result){
+    if(result){
         res.status(200).send({success: true, data:result});
     }else{
         res.status(500).send({success: false, message: "채팅 목록을 조회할 수 없습니다."});
@@ -54,7 +54,7 @@ const deleteChat = (req, res) => {
 
     let result = chattingService.deleteChat(room_id);
 
-    if(!result) {
+    if(result) {
         res.status(200).send({success: true, message: "성공적으로 삭제하였습니다."});
     }else{ 
         res.status(500).send({success: false, message: "채팅방 삭제에 실패하였습니다."});

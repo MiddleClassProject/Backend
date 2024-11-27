@@ -1,106 +1,431 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>실시간 채팅</title>
-    <link href="./chat_style.css" rel="stylesheet" type="text/css" />
-  </head>
-
-  <body>
-    <div id="enter">
-      <h3>닉네임을 입력하세요.</h3>
-      <input id="nickname" /><button id="joinBtn">JOIN</button>
-    </div>
-    <div id="msg_container">
-      <ul id="message"></ul>
-    </div>
-    <div id="chat_container">
-      <form id="chatForm" class="hidden">
-        <input id="content" autocomplete="off" /><button>전송</button>
-      </form>
-    </div>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link href="./chat_style.css" rel="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+        display: flex;
+        height: 100vh;
+        background-color: #ffffff;
+        }
+
+        .sidebar {
+        width: 260px;
+        background-color: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        }
+
+        .chat-list {
+        list-style: none;
+        padding: 8px;
+        }
+
+        .chat-item {
+        padding: 12px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+        }
+
+        .chat-item:hover {
+        background-color: #f3f4f6;
+        }
+
+        .chat-item.active {
+        background-color: #f3f4f6;
+        }
+
+        .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        }
+
+        .chat-header {
+        padding: 16px;
+        border-bottom: 1px solid #e5e7eb;
+        }
+
+        .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        }
+
+        .message {
+        max-width: 80%;
+        margin-bottom: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        line-height: 1.5;
+        }
+
+        .message.received {
+        background-color: #f3f4f6;
+        margin-right: auto;
+        }
+
+        .message.sent {
+        background-color: #0084ff;
+        color: white;
+        margin-left: auto;
+        }
+
+        .input-container {
+        padding: 16px;
+        border-top: 1px solid #e5e7eb;
+        }
+
+        .message-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        resize: none;
+        outline: none;
+        font-size: 14px;
+        }
+
+        .message-input:focus {
+        border-color: #0084ff;
+        }
+
+
+
+        #chat_container{
+        display: flex;
+        justify-content: center;
+        }
+
+        #chat_container button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #989085;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        #chat_container button:hover {
+        background-color: #c0b5a7;
+        }
+
+        .hidden {
+        display: none;
+        width: 400px;
+        }
+
+        #chatForm {
+        display: flex;
+        }
+
+        #content {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        }
+        #message {
+        height: 800px;
+        background-color: #FFFEF5;
+        padding: 0;
+        margin: 0;
+        overflow-y: auto;
+        }
+        .me {
+        text-align: right;
+        display: flex;
+        justify-content: right;
+        }
+        .other {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        }
+        .nickname {
+        width: fit-content;
+        }
+        .msg {
+        width: fit-content;
+        max-width: 20ch;
+        word-wrap: break-word;
+        white-space: normal;
+        padding: 7px;
+        background-color: #C9C0AE;
+        color: white;
+        border-radius: 5px;
+        }
+
+        .hidden {
+        display: none;
+        width: 793px;
+        height:40px;
+        }
+
+        .px-4 {
+        color: black;
+        }
+
+        .chat-item:hover, .chat-item.active {
+            background-color: #f3f4f6;
+        }
+        #messagesContainer {
+            height: calc(100vh - 160px);
+            overflow-y: auto;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+        .message.received {
+            background-color: #f3f4f6;
+            margin-right: auto;
+        }
+        .message.sent {
+            background-color: #C9C0AE;
+            color: white;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body class="flex h-screen bg-white">
+    <div class="w-64 bg-white border-r border-gray-200 flex flex-col overflow-y-auto">
+        <div class="chat-list p-2">
+            <!-- <div class="chat-item p-3 mb-1 cursor-pointer rounded-lg transition-colors" onclick="selectChat(this, '그냥자고싶어용')">그냥자고싶어용</div>
+            <div class="chat-item p-3 mb-1 cursor-pointer rounded-lg transition-colors" onclick="selectChat(this, '채팅2')">채팅2</div>
+            <div class="chat-item p-3 mb-1 cursor-pointer rounded-lg transition-colors" onclick="selectChat(this, '채팅3')">채팅3</div> -->
+        </div>
+    </div>
+    <div id="mainContent" class="flex-1 flex flex-col bg-white hidden">
+        <div class="p-4 border-b border-gray-200">
+            <h2 id="chatTitle" class="text-xl font-semibold">채팅방</h2>
+        </div>
+        <div id="messagesContainer" class="flex-1 p-5 bg-[#FFFEF5]">
+
+        </div>
+        <div id="paymentModal">
+            <div id="payment">
+              <span>결제를 요청하시겠습니까?</span>
+              <div id="payChoice">
+                <button id="confirmYes">예</button>
+                <button id="confirmNo">아니요</button>
+              </div>
+            </div>
+          </div>
+        <div class="border-t border-gray-200 p-4">
+            <div id="chat_container">
+                <form id="chatForm" class="flex">
+                  <i id="paid" class="fa-solid fa-credit-card"></i>
+                  <input id="messageInput" type="text" class="flex-grow p-2 border border-gray-300 rounded-l-lg" placeholder="메시지를 입력하세요">
+                <button type="submit">전송</button>
+                </form>
+              </div>
+            
+        </div>
+    </div>
+    <div id="placeholderContent" class="flex-1 flex items-center justify-center text-gray-500">
+
+    </div>
+
     <script>
-      var nickname;
-      var socket = io();
 
-      //쿠키에서 값을 가져오기
-      function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        return null;
-      }
 
-      // 'user'라는 이름의 쿠키 값 가져오기
-      const userCookie = getCookie('user_id');
-      if (userCookie == null) {
-          // 닉네임이 제대로 입력되지 않았다면
-          alert('로그인을 해주세요');
-          return false;
+        /*소켓 통신*/
+        //===========================================
+
+        var socket = io();
+        var currentChat = null;
+        var nickname = getCookie('user_id');
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            socket.emit('join', parts[1]);
+            console.log("fdf");
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
         }
 
-        // 닉네임이 입력되었다면, 서버에 join을 요청합니다.
-      nickname = userCookie;
-      socket.emit('join', nickname);
-      // join 버튼을 누르거나 닉네임 입력 후 Enter 버튼을 누르면 서버에 join을 요청합니다.
-
-      // join Event 발생
-      $('#joinBtn').click(function (e) {
-        enterNickname(e);
-      });
-
-      $('#nickname').keypress(function (e) {
-        if (e.which == 13) {
-          // Enter 키가 눌러진다면
-          enterNicknmae(e);
+        if (!nickname) {
+            alert('로그인을 해주세요');
         }
+
+        function selectChat(element, chatName) {
+            $('.chat-item').removeClass('active');
+            $(element).addClass('active');
+            currentChat = chatName;
+            $('#chatTitle').text(chatName);
+            $('#mainContent').removeClass('hidden');
+            $('#placeholderContent').addClass('hidden');
+            $('#messagesContainer').empty(); // Clear previous messages
+            getChat(chatName);
+        }
+
+        socket.on('msg', function(data) {
+            console.log('sdfjjrte');
+            if (currentChat) {
+                const messageElement = $('<div>').addClass('message').text(data.msg);
+                if (data.nickname === nickname) {
+                    messageElement.addClass('sent');
+                } else {
+                    messageElement.addClass('received').prepend($('<strong>').text(data.nickname + ': '));
+                }
+                $('#messagesContainer').append(messageElement);
+                $('#messagesContainer').scrollTop($('#messagesContainer')[0].scrollHeight);
+            }
+        });
+
+        $('form').submit(function(e) {
+            e.preventDefault();
+            const message = $('#messageInput').val();
+            if (message && currentChat) {
+                socket.emit('msg', message);
+                $('#messageInput').val('');
+            }
+        });
+
+
+        /*모달*/
+        //===========================================
+
+        $(document).ready(function () {
+        // 모달 열기
+        $('#paymentModal')
+            .css('display', 'none');
+        $('#paid').click(function () {
+          $('#paymentModal')
+            .css('display', 'flex')
+            .dialog({
+              modal: true, // 모달 설정
+              open: function () {
+                $('div[role="dialog"]').css('top', '120px');
+              },
+              // resizable: true, // 크기 조정 가능
+              // draggable: false, // 이동 불가
+              width: 'auto', // 내부 컨텐츠에 맞게 크기 자동 조정
+              height: '860px',
+              top: '120px',
+              close: function () {
+                $('#paymentModal').css('display', 'none'); // 닫힐 때 display: none 설정
+              },
+            });
+        });
+
+        // "예" 버튼 클릭
+        $('#confirmYes').click(function () {
+          alert('결제가 요청되었습니다.');
+          $('#paymentModal').dialog('close'); // 모달 닫기
+        });
+
+        // "아니요" 버튼 클릭
+        $('#confirmNo').click(function () {
+          alert('결제를 취소하셨습니다.');
+          $('#paymentModal').dialog('close'); // 모달 닫기
+        });
       });
 
-      // 송신: 닉네임
-      function enterNickname(e) {
-        
-        
-      }
 
-      // 수신: 신규 클라이언트 접속
-      // 수정해야 할 것: 채팅 발신자, 수신자의 아이디가 전부 있어야 함.
 
-      // 수신: 퇴장
-      socket.on('left', function (data) {
-        // 종료 알림
-        $('#message').append(
-          $('<li>').text(data.nickname + '님이 퇴장하셨습니다.')
-        );
+      /*api 호출*/
+      //==============================================================
 
-        updateClientList(data.clientList);
-      });
+      // 서버에서 데이터 가져오기
+    fetch('/chat/list')
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.data);
+            // 받은 데이터를 HTML로 렌더링
+            renderChatRoomList(data.data);
+        })
+        .catch(error => console.error('Error fetching chat list:', error));
+    
+    // DOM에 채팅 리스트 추가하는 함수
+    function renderChatRoomList(chatData) {
+        const chatListContainer = document.querySelector('.chat-list'); // chat-list 컨테이너 선택
 
-      // 송신: 메시지 전송
-      $('form').submit(function () {
-        socket.emit('msg', $('#content').val());
-        $('#content').val('');
-        return false;
-      });
+        // 받은 객체 배열을 반복하며 각 데이터를 div로 생성
+        chatData.forEach(chat => {
+            // 새 div 생성
+            let name;
+            
+            //상대방의 화면이 뜨도록 하기.
+            if(nickname == chat.cus1){
+                name = chat.cus2
+            }else{
+                name = chat.cus1
+            }
 
-      // 수신: 메시지
-      socket.on('msg', function (data) {
-        console.log(nickname);
-        $('#message').append(
-          data.nickname === userCookie
-            ? $('<li class = "me">').append(
-                $('<span class="msg">').text(data.msg)
-              )
-            : $('<li class = "other">').append(
-                $('<span class="nickname">').text(data.nickname + ': '),
-                $('<span class="msg">').text(data.msg)
-              )
-        );
-      });
+            const chatItem = document.createElement('div');
+            chatItem.className = 'chat-item p-3 mb-1 cursor-pointer rounded-lg transition-colors';
+            chatItem.setAttribute('onclick', `selectChat(this, ${JSON.stringify(chat.room_id)})`);
+            chatItem.textContent = name || 'No Name'; // 채팅 데이터에서 이름 표시
+
+            // 컨테이너에 추가
+            chatListContainer.appendChild(chatItem);
+        });
+    }
+
+    function getChat(room_id){
+        fetch(`/chat/detail/${room_id}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.data);
+            // 받은 데이터를 HTML로 렌더링
+            renderChatList(data.data);
+        })
+        .catch(error => console.error('Error fetching chat list:', error));
+    }
+
+    function renderChatList(chat){
+
+        chat.forEach(data =>{
+            const messageElement = $('<div>').addClass('message').text(data.chat_message);
+                if (data.cus_id == nickname) {
+                    messageElement.addClass('sent');
+                } else {
+                    messageElement.addClass('received').prepend($('<strong>').text(data.cus_id + ': '));
+                }
+                $('#messagesContainer').append(messageElement);
+                $('#messagesContainer').scrollTop($('#messagesContainer')[0].scrollHeight);
+        });
+    }
+    
     </script>
-  </body>
+
+<script>
+    
+  </script>
+</body>
 </html>

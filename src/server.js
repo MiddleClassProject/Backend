@@ -90,12 +90,11 @@ server.listen(3000, () => {
 io.on("connection", function (socket) {
   let joinedClient = false;
   let sendId;
-  let chatRoomId;
+  let chatRoomId = 2;
 
 
   // 채팅 참여 요청
   socket.on("join", async function (data) {
-    console.log("ㅇㄹㅇ",data);
 
     if (joinedClient) {
       return false;
@@ -122,7 +121,7 @@ io.on("connection", function (socket) {
   socket.on("msg", async function (data) {
     console.log(`msg: ${data}`);
 
-    // chattingController.postMessage(chatRoomId, sendId, data);
+    chattingController.postMessage(chatRoomId, sendId, data);
 
     // 클라이언트에게 메시지 전송
     io.emit("msg", {

@@ -38,12 +38,11 @@ const checkChat = async (sendId, receiveId) => {
 
 const postMessage = async (chatRoomId, userId, message) => {
 
-    let sql = `INSERT INTO chat (room_id, user_id1, message) VALUES (?, ?, ?)`;
-
+    let sql = `INSERT INTO chat (chat_is_read, room_id, cus_id, chat_message, chat_date) VALUES (0, ?, ?, ?, now())`;
 
     try{
         // 메시지를 DB에 저장
-        await db.query(sql,[chatRoomId, userId, message]);
+        await pool.query(sql,[chatRoomId, userId, message]);
 
         return true;
     }catch(error){
@@ -55,7 +54,7 @@ const postMessage = async (chatRoomId, userId, message) => {
 
 const getChattingRoom = async(user_id) => {
 
-    let sql =`SELECT user_id1, user_id2 from chatroom where user_id1 = ? or user_id2 = ?`;
+    let sql =`SELECT room_id, cus1, cus2 from chatroom where cus1 = ? or cus2 = ?`;
     
     try{
         let [result] = await pool.query(sql, [user_id, user_id]);
@@ -68,7 +67,7 @@ const getChattingRoom = async(user_id) => {
 
 
 const getChatDetail = async (room_id) => {
-    let sql = `SELECT chat_id, user_id1, user_id2, message, date from chat where room_id = ?`;
+    let sql = `SELECT chat_id, cus_id, chat_message, chat_date from chat where room_id = ?`;
 
     try{
         let [result] = await pool.query(sql, [room_id]);
