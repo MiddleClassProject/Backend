@@ -1,62 +1,343 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지</title>
-    <link rel="stylesheet" href="/public/css/mypage.css"> 
-</head>
-<body>
 
-<div class="container">
-    <h1>마이페이지</h1>   
-    <!-- 프로필 영역 -->
-    <div class="profile">
-        <img src="profile.jpg" alt="Profile Picture">
-        <div class="profile-info">
-            <h2>닉네임: 사용자123</h2>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>마이페이지</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap) -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/mypage.css" rel="stylesheet" />
+</head>
+
+<body>
+    <main class="flex-shrink-0">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container px-5">
+                <a class="navbar-brand" href="main.html"><span class="fw-bolder text-primary"> ---</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                        <li class="nav-item"><a class="nav-link" href="#">교수님들</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../review/reviewList.html">후기</a></li>
+                        <li class="nav-item"><a class="nav-link" href="communityList.html">커뮤니티</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mypage.html">마이페이지</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-details">
+                <div class="profile-avatar" id="profileAvatar">👩</div>
+                <div class="profile-info">
+                    <div class="name" id="profileName">짱구는옷말려</div>
+                    <div id="profileDetails">여성 | 부산</div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">내 정보 수정</button>
+                <a href="pro.html" class="btn btn-outline-secondary">교수 계정 만들기</a>
+            </div>
+        </div>
+        <!-- Edit Profile Modal -->
+        <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProfileModalLabel">내 정보 수정</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editProfileForm">
+                            <div class="mb-3">
+                                <label for="editNickname" class="form-label">닉네임</label>
+                                <input type="text" class="form-control" id="editNickname" value="짱구는옷말려">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editGender" class="form-label">성별</label>
+                                <select class="form-select" id="editGender">
+                                    <option value="여성" selected>여성</option>
+                                    <option value="남성">남성</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editLocation" class="form-label">지역</label>
+                                <input type="text" class="form-control" id="editLocation" value="부산">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editAvatar" class="form-label">프로필 이미지</label>
+                                <input type="file" class="form-control" id="editAvatar">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary" id="saveProfileChanges">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="col-md-3 sidebar">
+                <a href="#favorites">즐겨찾기</a>
+                <a href="#post">내가 쓴 글</a>
+                <a href="#inquiry">문의내역</a>
+                <a href="#management">계좌 관리</a>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="col-md-9 main-content">
+                
+                <section id="management" class="card">
+                    <h5>계좌인증</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="/public/images/bank.png" alt="본인인증 이미지" style="width: 70px; height: 70px; margin: 3px 15px;">
+                        <div>&nbsp;&nbsp;&nbsp;상담을 위해 꼭 필요한 단계예요. 계좌를 등록해주세요</div>
+                    </div>
+                    <!-- 버튼 -->
+                    <button class="btn btn-lg" data-bs-toggle="modal" data-bs-target="#phoneAuthModal">계좌등록</button>
+
+                    <!-- 모달 -->
+                    <div class="modal fade" id="phoneAuthModal" tabindex="-1" aria-labelledby="phoneAuthModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="phoneAuthModalLabel">계좌 인증</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-center">안전한 거래를 위해 보유하고 있는 계좌정보를 입력해주세요.</p>
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="bank" class="form-label">은행 선택</label>
+                                            <select class="form-select" id="bank" style="max-height: 150px; overflow-y: auto;">
+                                                <option selected>한국은행</option>
+                                                <option value="1">국민은행</option>
+                                                <option value="2">신한은행</option>
+                                                <option value="3">우리은행</option>
+                                                <option value="4">하나은행</option>
+                                                <option value="5">농협은행</option>
+                                                <option value="6">iM뱅크</option>
+                                                <option value="7">SC제일은행</option>
+                                                <option value="8">한국씨티은행</option>
+                                                <option value="9">케이뱅크</option>
+                                                <option value="10">카카오뱅크</option>
+                                                <option value="11">토스뱅크</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="accountNumber" class="form-label">계좌번호</label>
+                                            <input type="text" class="form-control" id="accountNumber" placeholder="1234567890">
+                                        </div>
+                                        <small class="text-muted">* 평생 계좌번호, 가상 계좌번호는 지정할 수 없습니다.</small>
+                                        <div class="text-center mt-4">
+                                            <button type="button" class="btn btn-dark w-100" data-bs-dismiss="modal" onclick="showCompletedMessage()">다음</button>
+                                        </div>
+                                    </form>
+                                </div>                                                           
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <br>
+
+                <!-- Favorite Professors -->
+                <section id="favorites" class="favorite-section mb-5 mt-5">
+                    <h1>즐겨찾기한 교수</h1>
+                    <ul>
+                        <li class="professor-item">
+                            <img src="/public/images/pro2.png" alt="교수 A 사진" style="width: 60px; height: 60px; border-radius: 50%; margin-right: 10px;">
+                            <div>
+                                <strong>이름:</strong> 권기향<br>
+                                <strong>경력:</strong> 동아대학교 소프트웨어공학
+                            </div>
+                            <button class="btn btn-outline-secondary remove-button" style="margin-left: 10px;">즐겨찾기 해제</button>
+                        </li>
+                        <li class="professor-item">
+                            <img src="/public/images/이현석.png" alt="교수 B 사진" style="width: 60px; height: 60px; border-radius: 50%; margin-right: 10px;">
+                            <div>
+                                <strong>이름:</strong> 이현석<br>
+                                <strong>경력:</strong> 건국대학교 부동산학과
+                            </div>
+                            <button class="btn btn-outline-secondary remove-button" style="margin-left: 10px;">즐겨찾기 해제</button>
+                        </li>
+                        <li class="professor-item">
+                            <img src="/public/images/ken.png" alt="교수 C 사진" style="width: 60px; height: 60px; border-radius: 50%; margin-right: 10px;">
+                            <div>
+                                <strong>이름:</strong> Kenneth Rogoff<br>
+                                <strong>경력:</strong> 하버드대학교 경제학과
+                            </div>
+                            <button class="btn btn-outline-secondary remove-button" style="margin-left: 10px;">즐겨찾기 해제</button>
+                        </li>
+                    </ul>
+                </section>
+                <br>
+
+                <!-- My Posts and Comments -->
+                <section id="post" class="post-section">
+                    <h1>내가 쓴 글과 댓글</h1>
+                    <ul>
+                        <li>
+                            <strong>게시글:</strong> "입지만으로 보면 온천 4구역과 양정 1구역중 어디가 나은가요?" (2024-11-01)
+                            <div class="action-buttons">
+                                <button class="btn edit-btn">수정</button>
+                                <button class="btn delete-btn">삭제</button>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>댓글:</strong> "내년부터 대출규제 시행되면 경쟁률은 떨어질수도 있겠네요." (2024-11-02)
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary edit-btn">수정</button>
+                                <button class="btn btn-outline-secondary delete-btn">삭제</button>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>게시글:</strong> "동아대vs서울대 내년에 고3 자녀를 어디에 보내야 할까요" (2024-11-05)
+                            <div class="action-buttons">
+                                <button class="btn btn-outline-primary edit-btn">수정</button>
+                                <button class="btn btn-outline-secondary delete-btn">삭제</button>
+                            </div>
+                        </li>
+                    </ul>                                      
+                </section>
+                
+
+                <!-- Inquiry and Q&A -->
+                <section id="inquiry" class="bottom-sections">
+                    <div class="bottom-section">
+                        <h2>1:1 문의내역 <a href="#" class="more">더보기 &gt;</a></h2>
+                        <div class="content">최근 1개월간 문의하신 내용이 없습니다.</div>
+                    </div>
+                    <div class="bottom-section">
+                        <h2>공지사항 <a href="../review/notice.html" class="more">더보기 &gt;</a></h2>
+                        <div class="content">최근 1개월간 공지사항 내용이 없습니다.</div>
+                    </div>
+                </section>
+            </main>
         </div>
     </div>
+</main>
+    <!-- Footer -->
+    <footer class="bg-white py-4 mt-auto">
+        <div class="container px-5">
+            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                <div class="col-auto">
+                    <div class="small m-0">Copyright &copy; Your Website 2023</div>
+                </div>
+                <div class="col-auto">
+                    <a class="small" href="#">Privacy</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#">Terms</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    <!-- 즐겨찾기한 교수 목록 -->
-    <div class="favorites">
-        <div class="section-title">즐겨찾기한 교수</div>
-        <div class="list-item">교수1</div>
-        <div class="list-item">교수2</div>
-        <div class="list-item">교수3</div>
-    </div>
+    <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showCompletedMessage() {
+            // 계좌 정보 가져오기
+            const selectedBank = document.getElementById("bank").value; // 선택된 은행
+            const accountNumber = document.getElementById("accountNumber").value; // 입력된 계좌번호
 
-    <!-- 내가 쓴 글 -->
-    <div class="posts">
-        <div class="section-title">내가 쓴 글</div>
-        <div class="list-item">글 제목 1 - 작성일: 2024-09-28</div>
-        <div class="list-item">글 제목 2 - 작성일: 2024-09-25</div>
-        <div class="list-item">글 제목 3 - 작성일: 2024-09-20</div>
-    </div>
+            // 본인 인증 섹션 변경
+            const managementSection = document.getElementById("management");
+            managementSection.innerHTML = `
+            <div id="management" class="text-center p-4">
+                <h4 class="fw-bold">계좌 인증 완료</h4>
+                <p class="text-muted mt-4">다음 계좌 정보로 인증이 완료되었습니다:</p>
+                <div class="d-flex justify-content-center align-items-center mb-1 mt-3">
+                    <img src="/public/images/kb.png" alt="국민은행 로고" style="width: 30px; height: 30px; margin-right: 8px;">
+                    <p class="fs-5 fw-semibold mb-0">국민은행</p>
+                </div>
+                <p class="fs-6 text-secondary mb-3">
+                    계좌번호: <span class="fw-bold text-dark">57020201250468</span>
+                </p>
+                <button class="btn btn-outline-success px-4 py-2 rounded-pill" onclick="deleteAccount()">계좌 삭제</button>
+            </div>
 
-    <!-- 내가 쓴 댓글 -->
-    <div class="comments">
-        <div class="section-title">내가 쓴 댓글</div>
-        <div class="list-item">"과제 작작 내세요!" - 2024-10-01</div>
-        <div class="list-item">"동아대가 왜 하버드보다" - 2024-09-29</div>
-        <div class="list-item">"질문 있습니다." - 2024-09-30</div>
-    </div>
 
-    <!-- 프로필 수정 기능 -->
-    <div class="edit-profile">
-        <div class="section-title">프로필 수정</div>
-        <form>
-            <label for="profile-pic">프로필 사진 수정</label>
-            <input type="file" id="profile-pic" name="profile-pic">
-            <br><br>
-            <label for="nickname">닉네임 수정:</label>
-            <input type="text" id="nickname" name="nickname" value="사용자123">
-            <br><br>
-            <button type="submit">수정 저장</button>
-        </form>
-    </div>
+            `;
+        }
 
-</div>
+        // 계좌 삭제 함수
+        function deleteAccount() {
+            const managementSection = document.getElementById("management");
+            managementSection.innerHTML = `
+                <div class="text-center">
+                    <h5>계좌 정보 삭제됨</h5>
+                    <p>계좌 정보가 삭제되었습니다. 새 계좌를 등록해주세요.</p>
+                </div>
+            `;
+        }
 
+        document.getElementById('saveProfileChanges').addEventListener('click', function () {
+            // 닉네임 업데이트
+            const newNickname = document.getElementById('editNickname').value;
+            document.getElementById('profileName').textContent = newNickname;
+
+            // 성별과 지역 업데이트
+            const newGender = document.getElementById('editGender').value;
+            const newLocation = document.getElementById('editLocation').value;
+            document.getElementById('profileDetails').textContent = `${newGender} | ${newLocation}`;
+
+            // 프로필 이미지 업데이트 (파일 미리보기)
+            const avatarInput = document.getElementById('editAvatar');
+            if (avatarInput.files && avatarInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileAvatar').textContent = ''; // 기존 이모지 제거
+                    document.getElementById('profileAvatar').style.backgroundImage = `url('${e.target.result}')`;
+                    document.getElementById('profileAvatar').style.backgroundSize = 'cover';
+                    document.getElementById('profileAvatar').style.backgroundPosition = 'center';
+                    document.getElementById('profileAvatar').style.width = '60px';
+                    document.getElementById('profileAvatar').style.height = '60px';
+                    document.getElementById('profileAvatar').style.borderRadius = '50%';
+                };
+                reader.readAsDataURL(avatarInput.files[0]);
+            }
+
+            // 모달 닫기
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            modal.hide();
+        });
+
+         // 모든 즐겨찾기 해제 버튼에 이벤트 추가
+        document.querySelectorAll('.remove-button').forEach(button => {
+            button.addEventListener('click', function () {
+                // 부모 요소(li) 제거
+                const listItem = this.parentElement;
+                listItem.remove();
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const listItem = this.closest('li'); // 해당 버튼이 속한 li 요소 선택
+                if (listItem) {
+                    listItem.remove(); // li 요소 삭제
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
+<!--<a href="https://www.flaticon.com/kr/free-icons/id-" title="id 카드 아이콘">Id 카드 아이콘 제작자: photo3idea_studio - Flaticon</a>-->

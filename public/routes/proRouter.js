@@ -10,9 +10,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// 교수 로그인
-router.post('/prologin', proController.login);
-
 // 교수 회원가입 (자격증 파일 업로드 포함)
 router.post('/pro', upload.single('certificate'), proController.register);
 

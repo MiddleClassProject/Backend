@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProfessors, submitReview, getReviewList, likeReview  } = require('../controller/reviewController');
+const { getProfessors, getReviewList, submitReview, likeReview } = require('../controller/reviewController');
 const router = express.Router();
 
 router.get('/professors', getProfessors);

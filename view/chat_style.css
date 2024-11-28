@@ -1,3 +1,4 @@
+<style>
 * {
   box-sizing: border-box;
   margin: 0 0;
@@ -74,3 +75,4 @@ button {
 button:hover {
   background-color: #aef7b2;
 }
+</style>
