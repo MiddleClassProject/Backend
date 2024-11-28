@@ -268,6 +268,7 @@
         var socket = io();
         var currentChat = null;
         var nickname = getCookie('user_id');
+        let pro_id;
 
         function getCookie(name) {
             const value = `; ${document.cookie}`;
@@ -379,12 +380,14 @@
         chatData.forEach(chat => {
             // 새 div 생성
             let name;
-            
+            pro_id = chat.cus1; //cus1이 무조건 교수
+
             //상대방의 화면이 뜨도록 하기.
             if(nickname == chat.cus1){
                 name = chat.cus2
             }else{
                 name = chat.cus1
+                
             }
 
             const chatItem = document.createElement('div');
