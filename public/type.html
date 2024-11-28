@@ -1,33 +1,94 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>역할 선택</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>회원 유형 선택</title>
+    <!-- 헤더와 푸터 스타일 (styles.css) -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- 메인 콘텐츠 스타일 (type.css) -->
     <link rel="stylesheet" href="/public/css/type.css">
 </head>
-<body>
-    <div class="container">
-        <h1>역할을 선택하세요</h1>
-        <div class="button-container">
-            <button onclick="selectRole('고객')">고객</button>
-            <button onclick="selectRole('교수')">교수</button>
-        </div>
-    </div>
 
+<body class="d-flex flex-column h-100">
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container px-5">
+                <a class="navbar-brand" href="main.html"><span class="fw-bolder text-primary"> ---</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                        <li class="nav-item"><a class="nav-link" href="">교수님들</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">후기</a></li>
+                        <li class="nav-item"><a class="nav-link" href="communityList.html">커뮤니티</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mypage.html">마이페이지</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content flex-grow-1 pt-4">
+        <div class="container">
+            <h1>반갑습니다!<br>어떤 회원으로 가입할까요?</h1>
+            <p>고객은 꼭 고객으로, 교수는 꼭 교수로 가입해 주세요.</p>
+            <div class="role-container">
+                <div class="role" onclick="selectRole('고객')">
+                    <img src="/public/images/cus.png" alt="고객 회원">
+                    <span>고객 회원</span>
+                </div>
+                <div class="role" onclick="selectRole('교수')">
+                    <img src="/public/images/pro.png" alt="교수 회원">
+                    <span>교수 회원</span>
+                </div>
+            </div>
+            <div class="login">
+                <a href="/public/login.html">이미 계정이 있나요? 로그인</a>
+            </div>
+            <div class="info">
+                <p>
+                <p>1분 안에 회원가입하거나 로그인하세요. 사용자 유형에 상관없이 로그인 가능합니다.</p>
+            </div>
+        </div>
+    </main>
+    
+
+    <!-- Footer -->
+    <footer class="bg-white py-4 mt-auto">
+        <div class="container px-5">
+            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                <div class="col-auto">
+                    <div class="small m-0">Copyright &copy; Your Website 2023</div>
+                </div>
+                <div class="col-auto">
+                    <a class="small" href="#!">Privacy</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Terms</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function selectRole(role) {
-
-    
             if (role === '고객') {
-                // 고객일 경우 회원가입 페이지로 리다이렉트
                 window.location.href = '/public/cus.html';  // 회원가입 페이지로 이동 
-            } 
-            else if (role === '교수') {
+            } else if (role === '교수') {
                 window.location.href = '/public/pro.html';
             }
         }
     </script>
-    
 </body>
+
 </html>

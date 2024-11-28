@@ -1,137 +1,115 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Login & Sign Up 페이지</title>
-    <link rel="stylesheet" href="/public/css/test.css"> <!-- 필요한 경우 경로 수정 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>고객 회원가입</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/public/css/styles.css" rel="stylesheet" />
 </head>
-<body>
 
-<div class="form">
-      
-    <ul class="tab-group">
-        <li class="tab active"><a href="#signup">Sign Up</a></li>
-        <li class="tab"><a href="#login">Log In</a></li>
-    </ul>
-      
-    <div class="tab-content">
-
-        <!-- 회원가입 폼 -->
-        <div id="signup">   
-          <h1>Sign Up for Free</h1>
-          
-          <form method="post" action="http://localhost:3000/routes/cus">
-          
-          <div class="top-row">
-            <div class="field-wrap">
-              <label>아이디<span class="req">*</span></label>
-              <input type="text" name="id" id="id" required autocomplete="off" />
+<body class="d-flex flex-column h-100 bg-light">
+    <main class="flex-shrink-0">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container px-5">
+                <a class="navbar-brand" href="main.html"><span class="fw-bolder text-primary"> ---</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                        <li class="nav-item"><a class="nav-link" href="#">교수님들</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">후기</a></li>
+                        <li class="nav-item"><a class="nav-link" href="communityList.html">커뮤니티</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
+                    </ul>
+                </div>
             </div>
-        
-            <div class="field-wrap">
-              <label>사용자명<span class="req">*</span></label>
-              <input type="text" name="name" id="name" required autocomplete="off"/>
+        </nav>
+
+        <!-- 회원가입 Section-->
+        <section class="py-5">
+            <div class="container px-5 mb-5">
+                <div class="text-center mb-5">
+                    <h1 class="display-5 fw-bolder mb-0"><span class="text-gradient d-inline">Sign Up</span></h1>
+                </div>
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-6">
+                        <form method="post" action="http://localhost:3000/routes/cus">
+                            <div class="mb-3">
+                                <label for="id" class="form-label">아이디<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id" name="id" placeholder="아이디 입력" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">사용자명<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="사용자명 입력" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">나이<span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="age" name="age" placeholder="나이 입력" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">비밀번호<span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호 입력" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">회원가입</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="field-wrap">
-            <label>나이<span class="req">*</span></label>
-            <input type="number" name="age" id="age" required autocomplete="off"/>
-          </div>
-          
-          <div class="field-wrap">
-            <label>비밀번호<span class="req">*</span></label>
-            <input type="password" name="password" id="password" required autocomplete="off"/>
-          </div>
-          
-          <button type="submit" class="button button-block">회원가입</button>
-          
-          </form>
-
+        </section>
+    </main>
+    <!-- Footer-->
+    <footer class="bg-white py-4 mt-auto">
+        <div class="container px-5">
+            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                <div class="col-auto">
+                    <div class="small m-0">Copyright &copy; Your Website 2023</div>
+                </div>
+                <div class="col-auto">
+                    <a class="small" href="#!">Privacy</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Terms</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Contact</a>
+                </div>
+            </div>
         </div>
-        
-        <!-- 로그인 폼 -->
-        <div id="login">   
-          <h1>Welcome Back!</h1>
-          
-          <form method="post" action="/routes/cuslogin">
-          
-            <div class="field-wrap">
-              <label>아이디<span class="req">*</span></label>
-              <input type="text" name="id" required autocomplete="off"/>
-            </div>
-          
-            <div class="field-wrap">
-              <label>비밀번호<span class="req">*</span></label>
-              <input type="password" name="password" required autocomplete="off"/>
-            </div>
-          
-            <p class="forgot"><a href="#">비밀번호를 잊으셨나요?</a></p>
-          
-            <button type="submit" class="button button-block">로그인</button>
-          
-          </form>
-
-        </div>
-        
-    </div><!-- tab-content -->
-      
-</div> <!-- /form -->
-
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 <script>
     // 탭 전환 스크립트
-    // 입력 필드 포커스와 키 입력 시 레이블 이동
-    // 입력 필드 포커스와 키 입력 시 레이블 숨기기
-    document.querySelectorAll('.form input, .form textarea').forEach(function(input) {
-        input.addEventListener('keyup', handleLabel);
-        input.addEventListener('blur', handleLabel);
-        input.addEventListener('focus', handleLabel);
-    });
+  // 입력 필드 포커스와 키 입력 시 레이블 이동
 
-    function handleLabel(e) {
-        var label = this.previousElementSibling;
+  // 입력 필드 포커스와 키 입력 시 레이블 숨기기
+  document.querySelectorAll('.form input, .form textarea').forEach(function(input) {
+      input.addEventListener('keyup', handleLabel);
+      input.addEventListener('blur', handleLabel);
+      input.addEventListener('focus', handleLabel);
+  });
 
-        if (this.value !== '') {
-             label.classList.add('hide'); // 타자를 치면 레이블이 사라지도록 처리
-        } else {
-             label.classList.remove('hide'); // 입력이 없으면 다시 레이블 보이기
-        }
-    }
+  function handleLabel(e) {
+      var label = this.previousElementSibling;
 
-    // 탭 전환 처리
-    document.querySelectorAll('.tab a').forEach(function(tab) {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            // 탭 활성화/비활성화 처리
-            var parent = this.parentNode;
-            var siblings = parent.parentNode.children;
-            for (var i = 0; i < siblings.length; i++) {
-                siblings[i].classList.remove('active');
-            }
-            parent.classList.add('active');
-
-            // 콘텐츠 표시/숨기기 처리
-            var target = document.querySelector(this.getAttribute('href'));
-            document.querySelectorAll('.tab-content > div').forEach(function(content) {
-                content.style.display = 'none';
-            });
-            target.style.display = 'block';
-            target.style.opacity = 0;
-            var opacity = 0;
-            var interval = setInterval(function() {
-                opacity += 0.1;
-                target.style.opacity = opacity;
-                if (opacity >= 1) clearInterval(interval);
-            }, 50);
-        });
-    });
-
-// 기본적으로 첫 번째 탭 표시
-document.querySelector('.tab-group .active a').click();
-
+      if (this.value !== '') {
+          label.classList.add('hide'); // 타자를 치면 레이블이 사라지도록 처리
+      } else {
+          label.classList.remove('hide'); // 입력이 없으면 다시 레이블 보이기
+      }
+  }
 </script>
-
-</body>
 </html>
+
+  
+  

@@ -1,7 +1,7 @@
 const path = require('path');
 const pool = require('../../config/databaseSet');
 
-// 교수 로그인
+/*교수 로그인
 const login = async (req, res) => {
     const paramId = req.body.id;
     const paramPassword = req.body.password;
@@ -28,6 +28,7 @@ const login = async (req, res) => {
         res.end();
     }
 };
+*/
 
 // 교수 회원가입
 const register = async (req, res) => {
@@ -66,4 +67,4 @@ const register = async (req, res) => {
         res.end();
     }
 };
-module.exports = { login, register };
+module.exports = { register };
