@@ -3196,7 +3196,7 @@ textarea.form-control.is-invalid {
   z-index: 4;
 }
 
-.btn {
+.butn {
   --bs-btn-padding-x: 0.75rem;
   --bs-btn-padding-y: 0.375rem;
   --bs-btn-font-family: ;
@@ -9140,6 +9140,7 @@ fieldset:disabled .btn {
 }
 
 .text-center {
+  margin-top:  50px;
   text-align: center !important;
 }
 
@@ -13749,25 +13750,28 @@ html {
   }
 }
 
-/* ----------------- css 생성줄 */
+/* ----------------- css 생성줄 -------------------------*/
+
+/* 리뷰 컨테이너 */
 .review-container {
   display: flex;
-  justify-content: center;
-  gap: 20px; /* 각 리뷰 간의 간격 */
-  margin-top: 20px;
-  margin-bottom: 60px;
-  flex-wrap: wrap; /* 화면 크기에 따라 자동 줄 바꿈 */
+  flex-direction: column; /* 세로 정렬 */
+  gap: 20px;
+  padding: 20px;
 }
 
+/* 리뷰 아이템 */
 .review-item {
-  width: 200px;
   border: 1px solid #ddd;
-  border-radius: 10px;
   padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   background-color: #fff;
+  width: 100%; /* 가로로 길게 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
 }
+
 
 .button-review {
   display: inline-block;
@@ -13846,4 +13850,141 @@ html {
   margin-right: 5px; /* 텍스트와 이미지 간격 */
   vertical-align: middle; /* 텍스트와 정렬 */
 }
+
+.login-box {
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 250px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.login-content {
+  text-align: center;
+}
+
+.vertical-divider {
+  width: 2px;
+  background-color: #ddd;
+  height: 100vh;
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+/* ----------------- 섹션 분할용 스타일 ------------------------- */
+.section-divider {
+  border-top: 2px solid wheat; /* 검은색 선으로 분할 */
+  margin: 20px 0; /* 위아래 간격 */
+}
+
+/* 왼쪽 로그인 박스 */
+.left-panel {
+  flex: 10 10 200px; /* 고정된 너비 */
+  height: 100vh; /* 화면 전체 높이 */
+  position: sticky; /* 스크롤 시 고정 */
+  top: 0; /* 상단 기준 위치 */
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-right: 2px solid gainsboro; /* 오른쪽 세로 줄 */
+}
+
+/* 로그인 박스 크기 조정 */
+.left-panel .user-info {
+  border: 1px solid gainsboro;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px; /* 패딩 크기 증가 */
+  text-align: center;
+  width: 250px;
+  height: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel .user-info img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.left-panel .user-info button {
+  width: 150px;
+  margin-top: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.right-panel {
+  width: 1000px;
+  margin-left: 5%;
+}
+
+/* 가로줄 스타일 */
+.horizontal-divider {
+  border-top: 2px solid #000;
+  margin: 20px 0;
+}
+
+/* 텍스트 그라디언트 효과 */
+.text-gradient-wrapper {
+  margin-top: 50px; /* 상단 마진 */
+  display: flex;
+  justify-content: center; /* 가운데 정렬 */
+}
+
+.text-gradient {
+  background: -webkit-linear-gradient(315deg, #989085 0%, #e7dec5 100%);
+  -webkit-background-clip: text; /* 텍스트에만 그라디언트 적용 */
+  -webkit-text-fill-color: transparent; /* 배경은 투명 처리 */
+}
+
+.butn-custom {
+  color: var(--bs-btn-color, #fff) !important;
+  background-color: var(--bs-btn-bg, #989085) !important;
+  border-color: var(--bs-btn-border-color, #989085) !important;
+  padding: 10px 20px;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  display: inline-block;
+  transition: all 0.15s ease-in-out;
+}
+
+.butn-custom:hover {
+  background-color: var(--bs-btn-hover-bg, #726c64) !important;
+  border-color: var(--bs-btn-hover-border-color, #645f58) !important;
+}
+
+.butn-custom:focus {
+  background-color: var(--bs-btn-bg, #989085) !important;
+  border-color: var(--bs-btn-border-color, #989085) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb, 64, 79, 245), 0.5);
+}
+
+.butn-custom:active {
+  background-color: var(--bs-btn-active-bg, #57524c) !important;
+  border-color: var(--bs-btn-active-border-color, #5d5952) !important;
+  box-shadow: var(--bs-btn-active-shadow, inset 0 3px 5px rgba(0, 0, 0, 0.125));
+}
+
+
+
+
+
+
 
