@@ -58,7 +58,10 @@ const getChattingRoom = async(user_id) => {
     
     try{
         let [result] = await pool.query(sql, [user_id, user_id]);
-        return result;
+        sql = `SELECT pro.pro_name proname, cus.cus_name cusname from pro, cus where pro.pro_id = ? OR cus.cus_id = ?`;
+        let [name] = await pool.query(sql, [result[0].cus1, result[0].cus2]);
+      
+        return {result, name};
     }catch(error){
         console.log(error);
         return undefined;

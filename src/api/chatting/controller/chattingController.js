@@ -25,11 +25,11 @@ const postMessage = (room_id, sender_id, message) => {
 //채팅방 조회
 const getChattingRoom = async(req, res) => {
     const user_id = req.cookies.user_id;
-    console.log(user_id);
+   
     let result = await chattingService.getChattingRoom(user_id);
-  
+    
     if(result){
-        res.status(200).send({success: true, data:result});
+        res.status(200).send(result);
     }else{
         res.status(500).send({success: false, message: "채팅방 목록을 조회할 수 없습니다."});
     }
@@ -38,7 +38,7 @@ const getChattingRoom = async(req, res) => {
 //채팅 조회
 const getChatDetail = async(req, res) => {
     const room_id = req.params.room_id;
-    console.log(room_id+"dfsg");
+  
     let result = await chattingService.getChatDetail(room_id);
 
     if(result){

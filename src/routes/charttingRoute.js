@@ -12,6 +12,10 @@ router.get("/", (req, res) => {
   res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/chat.html");
 });
 
+router.get("/payment", (req, res) => {
+  res.sendFile("/Users/kimminju/Desktop/MiddleClassBackend/Backend/" + "view/payment.html")
+});
+
 //채팅방 목록 조회
 router.get("/list", chattingController.getChattingRoom);
 
