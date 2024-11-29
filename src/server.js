@@ -63,7 +63,8 @@ app.use("/routes", proRouter);
 
 //현성
 app.use("/api/review", reviewRouter); 
-app.use("/chat", express.static(path.join(__dirname, "../view"))); 
+
+app.use("/chat", express.static(path.join(__dirname, "/../view"))); 
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
