@@ -5,6 +5,6 @@ const router = express.Router();
 router.get('/professors', getProfessors);
 router.get('/list', getReviewList);
 router.post('/submit', submitReview);
-router.post('/like', likeReview);
+router.post('/like', likeReview); // 좋아요 라우트
 
 module.exports = router;
