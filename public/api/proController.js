@@ -52,14 +52,14 @@ const register = async (req, res) => {
 
         await conn.query('INSERT INTO users (user_id, user_type) VALUES (?, ?)', [paramId, 'pro']);
         await conn.query('INSERT INTO pro (pro_id, pro_name, pro_age, pro_password, pro_path, pro_check) VALUES (?, ?, ?, ?, ?, ?)', [paramId, paramName, paramAge, paramPassword, paramPath, false]);
-
-        await conn.query('INSERT INTO reviewdata (pro_name) VALUES (?)', [paramName]);
-
         conn.release();
 
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
-        res.write('<h2>교수 추가 성공</h2>');
-        res.end();
+        res.send(`
+            <script>
+                alert('회원가입이 성공적으로 완료되었습니다');
+                window.location.href = '/public/login.html';
+            </script>
+        `);
     } catch (err) {
         console.error("DB connection or query error:", err);
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });

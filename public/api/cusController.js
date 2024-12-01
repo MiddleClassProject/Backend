@@ -21,14 +21,17 @@ const register = async (req, res) => {
 
         // 3. 고객 정보 추가
         await conn.query(
-            'INSERT INTO cus (cus_id, cus_name, cus_age, cus_password) VALUES (?, ?, ?, ?)',
+            'INSERT INTO cus (id, cus_name, cus_age, cus_password) VALUES (?, ?, ?, ?)',
             [paramId, paramName, paramAge, paramPassword]
         );
 
-        // 회원가입 성공 응답
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
-        res.write('<h2>학생 추가 성공</h2>');
-        res.end();
+        // 회원가입 성공 후 login.html로 이동
+        res.send(`
+            <script>
+                alert('회원가입이 성공적으로 완료되었습니다');
+                window.location.href = '/public/login.html';
+            </script>
+        `);
     } catch (err) {
         console.error('회원가입 오류:', err);
 
