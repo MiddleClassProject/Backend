@@ -3,18 +3,18 @@ const pool = require('../../../../config/databaseSet');
 // 커뮤니티 목록보기 
 const findAll = async (res) => {
 
-    let sql = `SELECT community_id, community_title, cus_id, created_at 
+    let sql = `SELECT community_id, community_title, community_content, cus_id, created_at 
                 FROM community`;
 
     try {
         const [communityList] = await pool.query(sql);
 
-        const result = communityList.map((c, index) => ({
-            no: index + 1,
+        const result = communityList.map((c) => ({
             id: c.community_id,
             title: c.community_title,
-            writer: c.community_user,
-            createdAt: c.created_at
+            content: c.community_content,
+            user: c.cus_id,
+            date: c.created_at
         }));
 
         console.log(result);

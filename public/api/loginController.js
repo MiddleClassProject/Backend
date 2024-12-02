@@ -29,7 +29,7 @@ const login = async (req, res) => {
 
         if (userType === 'cus') {
             tableName = 'cus';
-            query = 'SELECT cus_password FROM cus WHERE cus_id = ? AND cus_password = ?';
+            query = 'SELECT cus_password FROM cus WHERE id = ? AND cus_password = ?';
         } else if (userType === 'pro') {
             tableName = 'pro';
             query = 'SELECT pro_password FROM pro WHERE pro_id = ? AND pro_password = ?';
