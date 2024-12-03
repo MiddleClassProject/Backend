@@ -63,15 +63,10 @@ app.use("/routes", loginRouter);
 
 //현성
 app.use("/api/review", reviewRouter);
-<<<<<<< HEAD
-app.use("/chat", express.static(path.join(__dirname, "../view")));
-=======
-
-app.use("/chat", express.static(path.join(__dirname, "/../view"))); 
->>>>>>> 454f06602869145c9ed0b3fad85c5e00bb207482
+app.use("/chat", express.static(path.join(__dirname, "/../view")));
 
 app.get("/", (req, res) => {
-  res.sendFile("C:/Users/pc/Desktop/project/Backend/" + "view/main.html");
+  res.sendFile(path.join(__dirname, "../view/main.html"));
 });
 
 app.use("/chat", chatRouter);

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const postId = params.get("id");
 
     if (postId) {
-        fetch(`/community/call/${postId}`)
+        fetch(`/community/list/${postId}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // 서버에서 데이터 가져오기
-fetch("/community/call")
+fetch("/community/list")
     .then((res) => res.json())
     .then((data) => {
         renderCommunityList(data); // 받은 데이터를 HTML로 렌더링
@@ -24,14 +24,11 @@ fetch("/community/call")
 function renderCommunityList(communityData) {
     const communityListContainer = document.querySelector("#community-list");
 
-    // 기존 내용을 초기화
-    communityListContainer.innerHTML = "";
-
     console.log(communityData);
 
     // 받은 객체 배열을 반복하며 각 데이터를 카드 형식으로 생성
     communityData.list.forEach((community) => {
-        const { id, title, content, user, date } = community;
+        const { id, title, content, userId, userName, date } = community;
 
         // 카드 요소 생성
         const card = document.createElement("div");
@@ -39,7 +36,7 @@ function renderCommunityList(communityData) {
         card.style.cursor = "pointer";
         card.setAttribute(
             "onclick",
-            `window.location.href='/community/${id}'`
+            `window.location.href='/community/list/${id}'`
         );
 
         // 카드 내용 구성
@@ -47,7 +44,7 @@ function renderCommunityList(communityData) {
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
                 <p class="card-text text-muted">${content}</p>
-                <small class="text-muted">${user} · ${date}</small>
+                <small class="text-muted">${userName} · ${date}</small>
             </div>
         `;
 
