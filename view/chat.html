@@ -40,7 +40,7 @@
   <body class="flex h-screen">
     
     <!-- Navigation-->
-    <div data-include-path="headerfooter.html"></div>
+    <div data-include-path="header.html"></div>
 
     <div
       class="border-r border-gray-200 flex"
@@ -259,7 +259,7 @@
       const chatListContainer = document.querySelector('.chat-list'); // chat-list 컨테이너 선택
 
       // 받은 객체 배열을 반복하며 각 데이터를 div로 생성
-      chatData.result.forEach((chat) => {
+      chatData.result.forEach((chat,index) => {
         // 새 div 생성
         let name;
         pro_id = chat.cus1; //cus1이 무조건 교수
@@ -287,7 +287,20 @@
 
         // 컨테이너에 추가
         chatListContainer.appendChild(chatItem);
-      });
+
+        if (index === 0) {
+            firstChatItem = { element: chatItem, name, room_id: chat.room_id };
+          }
+        });
+
+        // 첫 번째 채팅방 자동 활성화
+        if (firstChatItem) {
+          selectChat(
+            firstChatItem.element,
+            firstChatItem.name,
+            firstChatItem.room_id
+          );
+        }
     }
 
     function getChat(room_id) {

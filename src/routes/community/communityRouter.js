@@ -3,6 +3,9 @@ const router = express.Router();
 const path = require('path');
 const communityController = require('../../api/community/controller/communityController');
 
+router.get('/writer', (req, res) => {
+    res.sendFile(path.join(__dirname, "../../../view/communityPost.html"))
+});
 
 // 커뮤니티 목록보기
 router.get('/list', communityController.communityList);
