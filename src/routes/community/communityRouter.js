@@ -26,12 +26,12 @@ router.patch('/:communityId', communityController.communityModify);
 router.delete('/:communityId', communityController.communityDelete);
 
 // 커뮤니티 좋아요 토글
-router.post('/ccommunityId/like', communityController.toggleLike);
+router.post('/:communityId/like', communityController.toggleLike);
 
 // 커뮤니티 댓글 작성
-router.post('/communityId/comments', communityController.createComment);
+router.post('/:communityId/comments', communityController.createComment);
 
 // 커뮤니티 댓글 삭제
-router.delete('/communityId/comments/:commentId', communityController.deleteComment);
+router.delete('/:communityId/comments/:commentId', communityController.deleteComment);
 
 module.exports = router;
