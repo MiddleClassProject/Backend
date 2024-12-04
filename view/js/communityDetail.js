@@ -10,7 +10,6 @@ fetch(`/community/list/${communityId}`)
     })
     .catch((error) => console.error("Error fetching community Detail:", error));
 
-
 // 상세보기 데이터 렌더링 함수
 function renderCommunityDetail(data) {
     const postContainer = document.querySelector(".card.mb-4.shadow-sm.p-3");
@@ -46,8 +45,7 @@ function renderCommunityDetail(data) {
 
 // 댓글 렌더링 함수
 function renderComments(container, comments) {
-    // 부모 댓글 요소를 참조하기 위해 맵 생성
-    const commentMap = {};
+    const commentMap = {}; // 댓글 ID를 키로 하는 맵 생성
 
     comments.forEach(comment => {
         const { comment_id, content, cus_id, id, parent_id, created_at } = comment;
@@ -65,28 +63,37 @@ function renderComments(container, comments) {
                 <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
                 <small class="text-muted">답글 달기</small>
             </div>
+            <div class="mx-4"></div> <!-- 자식 댓글 컨테이너 -->
         `;
 
-        // 댓글이 부모 댓글인지 확인
         if (parent_id === null) {
             // 부모 댓글일 경우 컨테이너에 추가
             container.appendChild(commentCard);
-            commentMap[comment_id] = commentCard; // 맵에 저장
+            commentMap[comment_id] = commentCard; // 부모 댓글 저장
         } else {
-            // 자식 댓글일 경우 부모 댓글의 아래에 추가
-            const parentCard = container.querySelector(`.card-body[data-comment-id="${parent_id}"]`);
+            // 자식 댓글일 경우 부모 댓글의 .mx-4 컨테이너에 추가
+            const parentCard = commentMap[parent_id]; // 부모 댓글 찾기
             if (parentCard) {
-                // 부모 댓글에 자식 댓글 컨테이너가 없으면 생성
-                let replyContainer = parentCard.querySelector(".reply-container");
-                if (!replyContainer) {
-                    replyContainer = document.createElement("div");
-                    replyContainer.className = "reply-container ms-4"; // 들여쓰기 스타일 적용
-                    parentCard.appendChild(replyContainer);
+                const replyContainer = parentCard.querySelector('.mx-4');
+                if (replyContainer) {
+                    // 자식 댓글 HTML 생성
+                    const replyHTML = `
+                        <div class="reply">
+                            <small class="fw-bolder">${id}</small>
+                            <p class="mb-1">${content}</p>
+                            <div class="d-flex align-items-center mb-2">
+                                <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
+                                <small class="text-muted">답글 달기</small>
+                            </div>
+                        </div>
+                    `;
+                    replyContainer.insertAdjacentHTML('beforeend', replyHTML);
+                } else {
+                    console.error("`.mx-4` 컨테이너를 찾을 수 없습니다.");
                 }
-                replyContainer.appendChild(commentCard); // 자식 댓글 추가
+            } else {
+                console.error(`Parent comment with ID ${parent_id} not found.`);
             }
         }
     });
 }
-
-

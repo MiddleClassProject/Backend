@@ -39,28 +39,31 @@ const findAll = async (res) => {
 
 // 댓글 -> 트리 구조 변환 함수
 function nestComments(comments) {
-    const commentMap = new Map();
+    const commentMap = {}; // 댓글 ID를 키로 하는 맵 생성
+    const nestedComments = []; // 최상위 댓글을 담을 배열
 
-    // 모든 댓글을 Map에 저장
+    // 모든 댓글을 맵에 저장하고, 기본 구조 생성
     comments.forEach(comment => {
-        commentMap.set(comment.comment_id, { ...comment, children: [] });
+        commentMap[comment.comment_id] = { ...comment, children: [] }; // children 초기화
     });
 
-    const nestedComments = [];
+    // 댓글들을 순회하며 트리 구조 구성
     comments.forEach(comment => {
-        if (comment.parent_id === null) {
-            nestedComments.push(commentMap.get(comment.comment_id)); // 최상위 댓글
+        const { parent_id, comment_id } = comment;
+
+        if (!parent_id) {
+            // 부모 댓글 (parent_id가 null)이면 최상위 배열에 추가
+            nestedComments.push(commentMap[comment_id]);
+        } else if (commentMap[parent_id]) {
+            // 자식 댓글이면 부모 댓글의 children 배열에 추가
+            commentMap[parent_id].children.push(commentMap[comment_id]);
         } else {
-            // 대댓글 -> 부모의 children 배열에 추가
-            const parent = commentMap.get(comment.parent_id);
-            if (parent) {
-                parent.children.push(commentMap.get(comment.comment_id));
-            }
+            console.error(`Parent comment with ID ${parent_id} not found.`);
         }
     });
-
     return nestedComments;
 }
+
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
@@ -98,7 +101,7 @@ const findById = async (userId, communityId, res) => {
         const [comments] = await pool.query(sql2, [communityId]);
 
         // 댓글 트리 구성
-        const nestedComments = nestComments(comments);
+        const nestedComments = comments.length > 0 ? nestComments(comments) : [];
 
         const result = {
             community_id: community.community_id,
