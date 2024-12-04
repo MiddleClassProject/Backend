@@ -39,28 +39,31 @@ const findAll = async (res) => {
 
 // 댓글 -> 트리 구조 변환 함수
 function nestComments(comments) {
-    const commentMap = new Map();
+    const commentMap = {}; // 댓글 ID를 키로 하는 맵 생성
+    const nestedComments = []; // 최상위 댓글을 담을 배열
 
-    // 모든 댓글을 Map에 저장
+    // 모든 댓글을 맵에 저장하고, 기본 구조 생성
     comments.forEach(comment => {
-        commentMap.set(comment.comment_id, { ...comment, children: [] });
+        commentMap[comment.comment_id] = { ...comment, children: [] }; // children 초기화
     });
 
-    const nestedComments = [];
+    // 댓글들을 순회하며 트리 구조 구성
     comments.forEach(comment => {
-        if (comment.parent_id === null) {
-            nestedComments.push(commentMap.get(comment.comment_id)); // 최상위 댓글
+        const { parent_id, comment_id } = comment;
+
+        if (!parent_id) {
+            // 부모 댓글 (parent_id가 null)이면 최상위 배열에 추가
+            nestedComments.push(commentMap[comment_id]);
+        } else if (commentMap[parent_id]) {
+            // 자식 댓글이면 부모 댓글의 children 배열에 추가
+            commentMap[parent_id].children.push(commentMap[comment_id]);
         } else {
-            // 대댓글 -> 부모의 children 배열에 추가
-            const parent = commentMap.get(comment.parent_id);
-            if (parent) {
-                parent.children.push(commentMap.get(comment.comment_id));
-            }
+            console.error(`Parent comment with ID ${parent_id} not found.`);
         }
     });
-
     return nestedComments;
 }
+
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
@@ -98,7 +101,7 @@ const findById = async (userId, communityId, res) => {
         const [comments] = await pool.query(sql2, [communityId]);
 
         // 댓글 트리 구성
-        const nestedComments = nestComments(comments);
+        const nestedComments = comments.length > 0 ? nestComments(comments) : [];
 
         const result = {
             community_id: community.community_id,
@@ -199,34 +202,43 @@ const deleteById = async (communityId, req, res) => {
     }
 }
 
-// 좋아요 토글 (추가/취소)
-const toggleLike = async (userId, communityId, res) => {
-    const checkSql = `SELECT * 
-                        FROM \`like\` 
-                        WHERE cus_id = ? AND community_id = ?`;
-    const insertSql = `INSERT INTO \`like\` (cus_id, community_id, created_at) 
+// 좋아요 추가
+const createLike = async (userId, communityId, res) => {
+    const sql = `INSERT INTO \`like\` (cus_id, community_id, created_at) 
                         VALUES (?, ?, NOW())`;
-    const deleteSql = `DELETE FROM \`like\` 
-                        WHERE cus_id = ? AND community_id = ?`;
 
     try {
-        const [like] = await pool.query(checkSql, [userId, communityId]);
-        let result;
-        if (like.length > 0) {
-            await pool.query(deleteSql, [userId, communityId]);
-            result = false; // 좋아요 취소
-        } else {
-            await pool.query(insertSql, [userId, communityId]);
-            result = true; // 좋아요 추가
-        }
+        const [result] = await pool.query(sql, [userId, communityId]);
 
         console.log(result);
 
         res.status(200).send({
             success: true,
-            message: result ? "좋아요를 추가했습니다." : "좋아요를 취소했습니다."
+            message: "좋아요를 추가했습니다."
         });
+    } catch (error) {
+        console.error("좋아요 처리 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "좋아요 처리 중 에러가 발생했습니다. 나중에 다시 시도해주세요."
+        });
+    }
+};
 
+// 좋아요 삭제
+const deleteLike = async (userId, communityId, res) => {
+    const sql = `DELETE FROM \`like\` 
+                        WHERE cus_id = ? AND community_id = ?`;
+
+    try {
+        const [result] = await pool.query(sql, [userId, communityId]);
+
+        console.log(result);
+
+        res.status(200).send({
+            success: true,
+            message: "좋아요를 삭제했습니다."
+        });
     } catch (error) {
         console.error("좋아요 처리 중 에러 발생:", error);
         res.status(500).send({
@@ -297,4 +309,4 @@ const deleteComment = async (commentId, res) => {
     }
 }
 
-module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, toggleLike, createComment, deleteComment }
+module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, createLike, deleteLike, createComment, deleteComment }
