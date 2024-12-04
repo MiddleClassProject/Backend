@@ -7,7 +7,8 @@ const communityList = (req, res) => {
 
 // 커뮤니티 상세보기
 const communityDetail = (req, res) => {
-    const userId = req.cookies.user_id;
+    // const userId = req.cookies.user_id;
+    const userId = 4;
     if (!userId) {
         return res.status(401).send({
             success: false,
