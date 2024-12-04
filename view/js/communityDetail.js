@@ -47,6 +47,10 @@ function renderCommunityDetail(data) {
     const deletePostButton = document.getElementById("deletePost");
     deletePostButton.addEventListener("click", () => deleteCommunityPost(community_id, cus_id));
 
+    // 수정 버튼 클릭 이벤트 등록
+    const editPostButton = document.getElementById("editPost");
+    editPostButton.addEventListener("click", () => editCommunityPost(postContainer, community_id, title, content, cus_id));
+
     // 댓글 섹션 렌더링
     const commentSection = document.querySelector(".mb-4 > .card.mb-3.p-3");
     if (comments !== null) {
@@ -140,6 +144,7 @@ function renderComments(container, comments) {
     });
 }
 
+// 답글 달기
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submitComment");
     const commentInput = document.getElementById("commentText");
@@ -338,4 +343,68 @@ async function deleteCommunityPost(communityId, cusId) {
             alert("게시글 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
         }
     }
+}
+
+// 커뮤니티 게시글 수정 함수
+function editCommunityPost(postContainer, communityId, currentTitle, currentContent, cusId) {
+    // 기존 수정 폼이 있으면 생성하지 않음
+    if (postContainer.querySelector(".edit-form")) return;
+
+    // 수정 폼 생성
+    const editForm = document.createElement("div");
+    editForm.className = "edit-form";
+    editForm.innerHTML = `
+        <textarea id="editTitle" class="form-control mb-2" placeholder="제목을 입력하세요">${currentTitle}</textarea>
+        <textarea id="editContent" class="form-control mb-2" rows="5" placeholder="내용을 입력하세요">${currentContent}</textarea>
+        <button id="submitEdit" class="btn btn-primary">등록</button>
+    `;
+
+    // 기존 제목 및 본문 제거
+    postContainer.querySelector("h4").style.display = "none";
+    postContainer.querySelector("p").style.display = "none";
+
+    // 수정 폼 추가
+    postContainer.appendChild(editForm);
+
+    // 등록 버튼 이벤트 리스너
+    const submitEditButton = editForm.querySelector("#submitEdit");
+
+    submitEditButton.addEventListener("click", async () => {
+        const updatedTitle = document.getElementById("editTitle").value.trim();
+        const updatedContent = document.getElementById("editContent").value.trim();
+
+        if (!updatedTitle || !updatedContent) {
+            alert("제목과 내용을 모두 입력해주세요.");
+            return;
+        }
+
+        // PUT 요청 데이터
+        const requestData = {
+            title: updatedTitle,
+            content: updatedContent,
+            cusId: cusId,
+        };
+
+        try {
+            // 서버로 수정 데이터 전송
+            const response = await fetch(`/community/${communityId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (response.ok) {
+                alert("게시글이 수정되었습니다.");
+                location.reload(); // 페이지 새로고침
+            } else {
+                const errorData = await response.json();
+                alert(`게시글 수정 실패: ${errorData.message || "알 수 없는 오류"}`);
+            }
+        } catch (error) {
+            console.error("게시글 수정 중 오류 발생:", error);
+            alert("게시글 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        }
+    });
 }

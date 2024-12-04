@@ -155,7 +155,7 @@ const uploadByUserId = async (userId, req, res) => {
 // 커뮤니티 글 수정
 const updateById = async (communityId, req, res) => {
     let sql = `UPDATE community 
-                SET community_title = ?, community_content = ? 
+                SET community_title = ?, community_content = ?
                 WHERE community_id = ?`;
 
     try {
@@ -180,13 +180,22 @@ const updateById = async (communityId, req, res) => {
 
 // 커뮤니티 글 삭제
 const deleteById = async (communityId, req, res) => {
-    let sql = `DELETE FROM community
+    let sql1 = `DELETE FROM comment
+                WHERE community_id = ? `
+    let sql2 = `DELETE FROM \`like\`
+                WHERE community_id = ? `
+    let sql3 = `DELETE FROM community
                 WHERE community_id = ?`;
 
     try {
-        const [result] = await pool.query(sql, [communityId]);
+        const [result1] = await pool.query(sql1, [communityId]);
+        console.log(result1);
 
-        console.log(result);
+        const [result2] = await pool.query(sql2, [communityId]);
+        console.log(result2);
+
+        const [result3] = await pool.query(sql3, [communityId]);
+        console.log(result3);
 
         res.status(200).send({
             success: true,
@@ -288,10 +297,10 @@ const createComment = async (userId, communityId, content, parentId, res) => {
 // 커뮤니티 댓글 삭제
 const deleteComment = async (commentId, res) => {
     let sql = `DELETE FROM comment
-                WHERE comment_id = ?`;
+                WHERE comment_id = ? OR parent_id = ?`;
 
     try {
-        const [result] = await pool.query(sql, [commentId]);
+        const [result] = await pool.query(sql, [commentId, commentId]);
 
         console.log(result);
 

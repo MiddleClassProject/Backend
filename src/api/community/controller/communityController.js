@@ -45,7 +45,7 @@ const communityModify = (req, res) => {
         });
     }
 
-    if (req.body.cusId !== userId) {
+    if (req.body.cusId != userId) {
         return res.status(403).send({
             success: false,
             message: "글을 수정할 권한이 없습니다."
