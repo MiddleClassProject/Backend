@@ -1,36 +1,37 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const communityController = require('../../api/community/controller/communityController');
 
 
 // 커뮤니티 목록보기
-router.get('/call', communityController.communityList);
+router.get('/list', communityController.communityList);
 router.get("/", (req, res) => {
-    res.sendFile("C:/Users/pc/Desktop/project/Backend/" + "view/communityList.html");
+    res.sendFile(path.join(__dirname, "../../../view/communityList.html"));
 });
 
 // 커뮤니티 상세보기 
-router.get('/call/:id', communityController.communityDetail);
+router.get('/list/:communityId', communityController.communityDetail);
 router.get("/:id", (req, res) => {
-    res.sendFile("C:/Users/pc/Desktop/project/Backend/" + "view/communityDetail.html");
+    res.sendFile(path.join(__dirname, "../../../view/communityDetail.html"));
 });
 
 // 커뮤니티 글쓰기
-router.post('/call/upload', communityController.communityUpload);
+router.post('/upload', communityController.communityUpload);
 
 // 커뮤니티 글 수정
-router.patch('/call/:id', communityController.communityModify);
+router.patch('/:communityId', communityController.communityModify);
 
 // 커뮤니티 글 삭제
-router.delete('/call/:id', communityController.communityDelete);
+router.delete('/:communityId', communityController.communityDelete);
 
 // 커뮤니티 좋아요 토글
-router.post('/call/:id/like', communityController.toggleLike);
+router.post('/ccommunityId/like', communityController.toggleLike);
 
 // 커뮤니티 댓글 작성
-router.post('/call/:id/comments', communityController.createComment);
+router.post('/communityId/comments', communityController.createComment);
 
 // 커뮤니티 댓글 삭제
-router.delete('/call/:id/comments/:commentId', communityController.deleteComment);
+router.delete('/communityId/comments/:commentId', communityController.deleteComment);
 
 module.exports = router;

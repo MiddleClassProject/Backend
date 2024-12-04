@@ -63,15 +63,13 @@ app.use("/routes", loginRouter);
 
 //현성
 app.use("/api/review", reviewRouter);
-app.use("/chat", express.static(path.join(__dirname, "../view")));
+app.use("/chat", express.static(path.join(__dirname, "/../view")));
 
 app.get("/", (req, res) => {
-  res.sendFile("C:/Users/pc/Desktop/project/Backend/" + "view/main.html");
+  res.sendFile(path.join(__dirname, "/../view/main.html"));
 });
 
 app.use("/chat", chatRouter);
-
-
 
 
 // ================== Socket ====================
