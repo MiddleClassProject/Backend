@@ -33,12 +33,19 @@ function renderCommunityDetail(data) {
     postMeta.innerHTML = `
         <i id="like" class="${is_like ? 'fa-solid fa-heart' : 'fa-regular fa-heart'} me-2"></i>
         <small class="me-4">좋아요 <span id="like-count">${likes}</span></small>
+        <div class="d-flex gap-2">
+            <button id="editPost" class="btn btn-outline-primary btn-sm">수정</button>
+            <button id="deletePost" class="btn btn-outline-primary btn-sm">삭제</button>
+        </div>
     `;
 
     // 좋아요 클릭 이벤트 등록
     const likeIcon = document.getElementById("like");
     likeIcon.addEventListener("click", () => toggleLike(likeIcon, community_id));
 
+    // 삭제 버튼 클릭 이벤트 등록
+    const deletePostButton = document.getElementById("deletePost");
+    deletePostButton.addEventListener("click", () => deleteCommunityPost(community_id, cus_id));
 
     // 댓글 섹션 렌더링
     const commentSection = document.querySelector(".mb-4 > .card.mb-3.p-3");
@@ -300,5 +307,35 @@ async function toggleLike(likeIcon, communityId) {
     } catch (error) {
         console.error("좋아요 처리 중 오류 발생:", error);
         alert("좋아요 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    }
+}
+
+// 게시글 삭제 함수
+async function deleteCommunityPost(communityId, cusId) {
+    if (confirm("정말 이 게시글을 삭제하시겠습니까?")) {
+        const requestData = {
+            cusId: cusId,
+        };
+
+        try {
+            const response = await fetch(`/community/${communityId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (response.ok) {
+                alert("게시글이 삭제되었습니다.");
+                window.location.href = "/community"; // 삭제 후 커뮤니티 목록으로 이동
+            } else {
+                const errorData = await response.json();
+                alert(`게시글 삭제 실패: ${errorData.message || "알 수 없는 오류"}`);
+            }
+        } catch (error) {
+            console.error("게시글 삭제 중 오류 발생:", error);
+            alert("게시글 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        }
     }
 }
