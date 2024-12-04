@@ -59,7 +59,7 @@ function renderComments(container, comments) {
                                     <div class="d-flex align-items-center mb-3">
                                         <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
                                         <small class="text-muted me-2">답글 달기</small>
-                                        <small class="text-muted">삭제</small>
+                                        <small class="text-muted delete-btn">삭제</small>
                                     </div>
                                     <div class="mx-4"></div> <!-- 자식 댓글 컨테이너 -->
                                 `;
@@ -67,18 +67,22 @@ function renderComments(container, comments) {
         // 부모 컨테이너에 댓글 추가
         parentContainer.appendChild(commentCard);
 
+        // 삭제 버튼 이벤트 리스너 등록
+        const deleteButton = commentCard.querySelector(".delete-btn");
+        deleteButton.addEventListener("click", () => deleteButtonClick(commentCard, comment_id, cus_id));
+
         // 자식 댓글이 있는 경우 대댓글 양식으로 렌더링
         if (children && children.length > 0) {
             const replyContainer = commentCard.querySelector('.mx-4'); // 자식 댓글 컨테이너
             children.forEach(childComment => {
-                renderReply(childComment, replyContainer); // 대댓글 양식으로 렌더링
+                renderReply(childComment, replyContainer);
             });
         }
     };
 
     // 대댓글 렌더링 함수
     const renderReply = (reply, parentContainer) => {
-        const { comment_id, content, id, created_at, children } = reply;
+        const { comment_id, content, cus_id, id, created_at, children } = reply;
 
         // 대댓글 DOM 요소 생성
         const replyElement = document.createElement("div");
@@ -90,7 +94,7 @@ function renderComments(container, comments) {
             <div class="d-flex align-items-center mb-2">
                 <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
                 <small class="text-muted me-2">답글 달기</small>
-                <small id="deleteReply" class="text-muted">삭제</small>
+                <small class="text-muted delete-btn">삭제</small>
             </div>
             <div class="mx-4"></div> <!-- 자식 대댓글 컨테이너 -->
         `;
@@ -98,16 +102,19 @@ function renderComments(container, comments) {
         // 대댓글을 부모 컨테이너에 추가
         parentContainer.appendChild(replyElement);
 
+        // 삭제 버튼 이벤트 리스너 등록
+        const deleteButton = replyElement.querySelector(".delete-btn");
+        deleteButton.addEventListener("click", () => deleteButtonClick(replyElement, comment_id, cus_id));
+
         // 자식 대댓글이 있는 경우 재귀적으로 렌더링
         if (children && children.length > 0) {
             const replyContainer = replyElement.querySelector('.mx-4'); // 자식 댓글 컨테이너
             children.forEach(childReply => {
-                renderReply(childReply, replyContainer); // 자식 대댓글 렌더링
+                renderReply(childReply, replyContainer);
             });
         }
     };
 
-    // 최상위 댓글부터 렌더링
     comments.forEach(comment => {
         renderComment(comment, container); // 부모 컨테이너에 댓글 렌더링
     });
@@ -116,7 +123,6 @@ function renderComments(container, comments) {
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submitComment");
     const commentInput = document.getElementById("commentText");
-    const deleteButton = document.getElementById("deleteReply");
 
     // 댓글 등록 버튼 클릭 이벤트
     submitButton.addEventListener("click", async function () {
@@ -144,12 +150,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             if (response.ok) {
-                // 성공적으로 댓글 등록 시 UI 업데이트 또는 페이지 새로고침
                 alert("댓글이 등록되었습니다.");
-                commentInput.value = ""; // 입력 필드 초기화
+                commentInput.value = "";
                 location.reload(); // 페이지 새로고침
             } else {
-                // 오류 처리
                 const errorData = await response.json();
                 alert(`댓글 등록 실패: ${errorData.message || "알 수 없는 오류"}`);
             }
@@ -158,32 +162,32 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("댓글 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
         }
     });
-
-    // 댓글 삭제 버튼 클릭 이벤트
-    submitButton.addEventListener("click", async function () {
-        try {
-            // 서버로 댓글 데이터 전송
-            const response = await fetch(`/community/${communityId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestData),
-            });
-
-            if (response.ok) {
-                alert("댓글이 삭제되었습니다.");
-                location.reload(); // 페이지 새로고침
-            } else {
-                // 오류 처리
-                const errorData = await response.json();
-                alert(`댓글 삭제 실패: ${errorData.message || "알 수 없는 오류"}`);
-            }
-        } catch (error) {
-            console.error("댓글 삭제 중 오류 발생:", error);
-            alert("댓글 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-        }
-    });
-
-
 });
+
+// 댓글 삭제
+async function deleteButtonClick(commentCard, commentId, cusId) {
+    const requestData = {
+        cusId: cusId,
+    };
+
+    try {
+        const response = await fetch(`/community/${communityId}/comments/${commentId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+        });
+
+        if (response.ok) {
+            alert("댓글이 삭제되었습니다.");
+            commentCard.remove(); // 삭제된 댓글을 DOM에서 제거
+        } else {
+            const errorData = await response.json();
+            alert(`댓글 삭제 실패: ${errorData.message || "알 수 없는 오류"}`);
+        }
+    } catch (error) {
+        console.error("댓글 삭제 중 오류 발생:", error);
+        alert("댓글 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    }
+}

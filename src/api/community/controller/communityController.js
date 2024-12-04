@@ -93,7 +93,7 @@ const deleteComment = async (req, res) => {
     const userId = req.cookies.user_id;
     const commentId = req.params.commentId;
 
-    if (req.body.cusId !== userId) {
+    if (req.body.cusId != userId) {
         return res.status(403).send({
             success: false,
             message: "댓글을 삭제할 권한이 없습니다."
