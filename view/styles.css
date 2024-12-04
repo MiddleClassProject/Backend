@@ -13992,3 +13992,25 @@ html {
         /* 밑줄 제거 */
     }
 }
+
+#submitButton{
+    width: 73px;
+    height: 38px;
+}
+#writeForm{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#backButton{
+    margin-bottom: 30px;
+}
+#titleInput {
+    border: none;
+    border-bottom: 2px solid transparent; /* 기본 테두리는 투명하게 */
+    border-image: linear-gradient(to right, #c0b5a7,#ede9de); /* 그라데이션 색상 */
+    border-image-slice: 1; /* 전체 영역 사용 */
+}
+#contentInput{
+    border: #c1b6a773 1.5px solid;
+}
