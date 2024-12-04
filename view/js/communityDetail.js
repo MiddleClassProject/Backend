@@ -58,7 +58,7 @@ function renderComments(container, comments) {
                                     <p>${content}</p>
                                     <div class="d-flex align-items-center mb-3">
                                         <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
-                                        <small class="text-muted me-2">답글 달기</small>
+                                        <small class="text-muted me-2 reply-btn">답글 달기</small>
                                         <small class="text-muted delete-btn">삭제</small>
                                     </div>
                                     <div class="mx-4"></div> <!-- 자식 댓글 컨테이너 -->
@@ -66,6 +66,10 @@ function renderComments(container, comments) {
 
         // 부모 컨테이너에 댓글 추가
         parentContainer.appendChild(commentCard);
+
+        // 답글 달기 버튼 이벤트 리스너 등록
+        const replyButton = commentCard.querySelector(".reply-btn");
+        replyButton.addEventListener("click", () => createReplyForm(commentCard, comment_id));
 
         // 삭제 버튼 이벤트 리스너 등록
         const deleteButton = commentCard.querySelector(".delete-btn");
@@ -93,7 +97,7 @@ function renderComments(container, comments) {
             <p class="mb-2">${content}</p>
             <div class="d-flex align-items-center mb-2">
                 <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
-                <small class="text-muted me-2">답글 달기</small>
+                <small class="text-muted me-2 reply-btn">답글 달기</small>
                 <small class="text-muted delete-btn">삭제</small>
             </div>
             <div class="mx-4"></div> <!-- 자식 대댓글 컨테이너 -->
@@ -101,6 +105,10 @@ function renderComments(container, comments) {
 
         // 대댓글을 부모 컨테이너에 추가
         parentContainer.appendChild(replyElement);
+
+        // 답글 달기 버튼 이벤트 리스너 등록
+        const replyButton = replyElement.querySelector(".reply-btn");
+        replyButton.addEventListener("click", () => createReplyForm(replyElement, comment_id));
 
         // 삭제 버튼 이벤트 리스너 등록
         const deleteButton = replyElement.querySelector(".delete-btn");
@@ -190,4 +198,64 @@ async function deleteButtonClick(commentCard, commentId, cusId) {
         console.error("댓글 삭제 중 오류 발생:", error);
         alert("댓글 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
     }
+}
+
+// 대댓글 생성
+function createReplyForm(parentCommentCard, parentCommentId) {
+    // 기존에 작성 영역이 이미 있으면 생성하지 않음
+    if (parentCommentCard.querySelector(".reply-form")) return;
+
+    // 대댓글 입력 폼 생성
+    const replyForm = document.createElement("div");
+    replyForm.className = "reply-form";
+    replyForm.innerHTML = `
+        <textarea class="form-control mb-2 reply-text" rows="3" placeholder="답글을 입력해 주세요"></textarea>
+        <button class="btn btn-primary submit-reply">등록</button>
+    `;
+
+    // 폼을 부모 댓글 아래에 추가
+    parentCommentCard.appendChild(replyForm);
+
+    // 등록 버튼 이벤트 리스너
+    const submitReplyButton = replyForm.querySelector(".submit-reply");
+    const replyTextArea = replyForm.querySelector(".reply-text");
+
+    submitReplyButton.addEventListener("click", async () => {
+        const replyContent = replyTextArea.value.trim();
+
+        if (!replyContent) {
+            alert("답글 내용을 입력해 주세요.");
+            return;
+        }
+
+        // POST 요청 데이터
+        const requestData = {
+            parentId: parentCommentId, // 부모 댓글 ID
+            communityId: communityId, // 현재 커뮤니티 ID
+            content: replyContent, // 답글 내용
+        };
+
+        try {
+            // 서버로 대댓글 데이터 전송
+            const response = await fetch(`/community/${communityId}/comments`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (response.ok) {
+                alert("답글이 등록되었습니다.");
+                replyTextArea.value = ""; // 입력 필드 초기화
+                location.reload(); // 페이지 새로고침
+            } else {
+                const errorData = await response.json();
+                alert(`답글 등록 실패: ${errorData.message || "알 수 없는 오류"}`);
+            }
+        } catch (error) {
+            console.error("답글 등록 중 오류 발생:", error);
+            alert("답글 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+        }
+    });
 }

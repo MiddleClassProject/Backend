@@ -85,6 +85,8 @@ const createComment = async (req, res) => {
     const content = req.body.content;
     const parentId = req.body.parentId ? req.body.parentId : null;
 
+    console.log("parentId : " + parentId);
+
     communityService.createComment(userId, communityId, content, parentId, res);
 };
 
