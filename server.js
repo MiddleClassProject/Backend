@@ -18,11 +18,11 @@ const communityRouter = require('./routes/community/communityRouter');
 const chatRouter = require('./routes/charttingRoute');
 const reviewRouter = require('../review/routes/reviewRouter');
 
-// 정인 라우터 추가
-const authRouter = require('../public/routes/authRouter')
-const cusRouter = require('../public/routes/cusRouter')
-const proRouter = require('../public/routes/proRouter')
-const loginRouter = require('../public/routes/loginRouter')
+// 정인 라우터 등록
+app.use("/routes", authRouter);
+app.use("/routes", cusRouter);
+app.use("/routes", proRouter);
+app.use("/routes", loginRouter);
 
 const http = require("http");
 const socketIO = require("socket.io");
@@ -38,6 +38,7 @@ const proController = require('../public/api/proController');
 const loginController = require('../public/api/loginController');
 
 dotenv.config();
+
 
 app.use(cors());
 app.use(express.json());
