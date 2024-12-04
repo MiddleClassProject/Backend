@@ -3,18 +3,21 @@ const pool = require('../../../../config/databaseSet');
 // 커뮤니티 목록보기 
 const findAll = async (res) => {
 
-    let sql = `SELECT community_id, community_title, cus_id, created_at 
-                FROM community`;
+    let sql = `SELECT co.community_id, co.community_title, co.community_content, cu.cus_id, cu.id, co.created_at 
+                FROM community co
+                JOIN cus cu
+                ON co.cus_id = cu.cus_id;`;
 
     try {
         const [communityList] = await pool.query(sql);
 
-        const result = communityList.map((c, index) => ({
-            no: index + 1,
+        const result = communityList.map((c) => ({
             id: c.community_id,
             title: c.community_title,
-            writer: c.community_user,
-            createdAt: c.created_at
+            content: c.community_content,
+            userId: c.cus_id,
+            userName: c.id,
+            date: c.created_at
         }));
 
         console.log(result);
@@ -61,22 +64,26 @@ function nestComments(comments) {
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
-    let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, 
-                c.community_content, c.created_at,
+    let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, cu.id, c.community_content, c.created_at,
                 CASE WHEN EXISTS (
-                    SELECT 1 
-                    FROM \`like\` l 
-                    WHERE l.community_id = c.community_id AND l.cus_id = ?
-                ) THEN true ELSE false END AS is_like,
+                        SELECT 1 
+                        FROM \`like\` l 
+                        WHERE l.community_id = c.community_id AND l.cus_id = ?
+                    ) THEN true ELSE false 
+                END AS is_like,
                 (SELECT COUNT(*) FROM \`like\` l WHERE l.community_id = c.community_id) AS likes
                 FROM community c
+                JOIN cus cu ON c.cus_id = cu.cus_id
                 WHERE c.community_id = ?;`;
-    let sql2 = `SELECT comment_id, content, cus_id, parent_id, created_at
-                FROM comment
-                WHERE community_id = ?
-                ORDER BY parent_id ASC, created_at ASC;`;
+    let sql2 = `SELECT co.comment_id, co.content, cu.cus_id, cu.id, co.parent_id, co.created_at
+                FROM comment co
+                JOIN cus cu ON co.cus_id = cu.cus_id
+                WHERE co.community_id = ?
+                ORDER BY co.parent_id ASC, co.created_at ASC;`;
 
     try {
+
+        console.log(userId, communityId)
         const [sql1Result] = await pool.query(sql1, [userId, communityId]);
 
         if (sql1Result.length === 0) {
@@ -95,10 +102,11 @@ const findById = async (userId, communityId, res) => {
 
         const result = {
             community_id: community.community_id,
-            community_title: community.community_title,
-            community_cus_id: community.cus_id,
-            community_content: community.community_content,
-            created_at: community.created_at,
+            title: community.community_title,
+            cus_id: community.cus_id,
+            author: community.id,
+            content: community.community_content,
+            date: community.created_at,
             is_like: community.is_like,
             likes: community.likes,
             comments: nestedComments

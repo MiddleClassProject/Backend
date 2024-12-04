@@ -48,9 +48,9 @@ app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/review', express.static(path.join(__dirname, '../review')));
 app.use('/images', express.static(path.join(__dirname, '../images')));
 
-//app.use('/view', express.static(path.join(__dirname, '../view')));
+app.use('/view', express.static(path.join(__dirname, '../view')));
 
-app.use("/view", express.static(path.join(__dirname, "view")));
+// app.use("/view", express.static(path.join(__dirname, "view")));
 app.use("/professors", professorRouter);
 app.use("/community", communityRouter);
 
@@ -63,16 +63,13 @@ app.use("/routes", loginRouter);
 
 //현성
 app.use("/api/review", reviewRouter);
-
-
+app.use("/chat", express.static(path.join(__dirname, "/../view")));
 
 app.get("/", (req, res) => {
-  res.send("Hello world!");
-})
+  res.sendFile(path.join(__dirname, "/../view/main.html"));
+});
 
 app.use("/chat", chatRouter);
-
-
 
 
 // ================== Socket ====================
@@ -91,12 +88,11 @@ server.listen(3000, () => {
 io.on("connection", function (socket) {
   let joinedClient = false;
   let sendId;
-  let chatRoomId;
+  let chatRoomId = 2;
 
 
   // 채팅 참여 요청
   socket.on("join", async function (data) {
-    console.log(data);
 
     if (joinedClient) {
       return false;
@@ -123,7 +119,7 @@ io.on("connection", function (socket) {
   socket.on("msg", async function (data) {
     console.log(`msg: ${data}`);
 
-    // chattingController.postMessage(chatRoomId, sendId, data);
+    chattingController.postMessage(chatRoomId, sendId, data);
 
     // 클라이언트에게 메시지 전송
     io.emit("msg", {
