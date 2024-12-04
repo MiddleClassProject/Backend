@@ -1,41 +1,22 @@
-// 쿠키에서 값을 가져오는 함수
+
+// 페이지 로드 시 로그인 박스 업데이트
+document.addEventListener('DOMContentLoaded', () => {
+    const userMessage = document.getElementById('userMessage');
+    const userActionButton = document.getElementById('userActionButton');
+
+    // 추가 초기화 작업
+    loadProfessors();
+    applyFilters();
+});
+
+
+// 쿠키에서 특정 키의 값을 가져오는 함수
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
 }
-
-// 페이지 로드 시 로그인 박스 업데이트
-window.onload = () => {
-    const userMessage = document.getElementById('userMessage');
-    const userActionButton = document.getElementById('userActionButton');
-
-    // 쿠키에서 'user_id' 값을 가져오기
-    const userId = getCookie('user_id');
-
-    if (userId) {
-        // 로그인 상태: 사용자 이름과 로그아웃 버튼 설정
-        userMessage.textContent = `${userId}님 환영합니다!`;
-        userActionButton.textContent = '로그아웃';
-        userActionButton.onclick = () => {
-            // 로그아웃 처리: 쿠키 삭제 후 페이지 새로고침
-            document.cookie = 'user_id=; Max-Age=0; path=/'; // 쿠키 삭제
-            location.reload(); // 페이지 새로고침
-        };
-    } else {
-        // 비로그인 상태: 기본 메시지와 로그인 버튼 유지
-        userMessage.textContent = '로그인 후 이용해주세요';
-        userActionButton.textContent = '로그인';
-        userActionButton.onclick = () => {
-            window.location.href = '../public/login.html'; // 로그인 페이지로 이동
-        };
-    }
-
-    // 나머지 페이지 초기화
-    loadProfessors();
-    applyFilters();
-};
 
 // 필터와 정렬 드롭다운 이벤트 리스너 등록
 document.getElementById('professorDropdown').addEventListener('change', applyFilters);
