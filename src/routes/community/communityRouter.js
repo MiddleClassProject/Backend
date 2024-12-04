@@ -28,8 +28,11 @@ router.patch('/:communityId', communityController.communityModify);
 // 커뮤니티 글 삭제
 router.delete('/:communityId', communityController.communityDelete);
 
-// 커뮤니티 좋아요 토글
-router.post('/:communityId/like', communityController.toggleLike);
+// 커뮤니티 좋아요 추가
+router.post('/:communityId/like', communityController.createLike);
+
+// 커뮤니티 좋아요 삭제
+router.delete('/:communityId/like', communityController.deleteLike);
 
 // 커뮤니티 댓글 작성
 router.post('/:communityId/comments', communityController.createComment);

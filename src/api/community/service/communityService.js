@@ -202,34 +202,43 @@ const deleteById = async (communityId, req, res) => {
     }
 }
 
-// 좋아요 토글 (추가/취소)
-const toggleLike = async (userId, communityId, res) => {
-    const checkSql = `SELECT * 
-                        FROM \`like\` 
-                        WHERE cus_id = ? AND community_id = ?`;
-    const insertSql = `INSERT INTO \`like\` (cus_id, community_id, created_at) 
+// 좋아요 추가
+const createLike = async (userId, communityId, res) => {
+    const sql = `INSERT INTO \`like\` (cus_id, community_id, created_at) 
                         VALUES (?, ?, NOW())`;
-    const deleteSql = `DELETE FROM \`like\` 
-                        WHERE cus_id = ? AND community_id = ?`;
 
     try {
-        const [like] = await pool.query(checkSql, [userId, communityId]);
-        let result;
-        if (like.length > 0) {
-            await pool.query(deleteSql, [userId, communityId]);
-            result = false; // 좋아요 취소
-        } else {
-            await pool.query(insertSql, [userId, communityId]);
-            result = true; // 좋아요 추가
-        }
+        const [result] = await pool.query(sql, [userId, communityId]);
 
         console.log(result);
 
         res.status(200).send({
             success: true,
-            message: result ? "좋아요를 추가했습니다." : "좋아요를 취소했습니다."
+            message: "좋아요를 추가했습니다."
         });
+    } catch (error) {
+        console.error("좋아요 처리 중 에러 발생:", error);
+        res.status(500).send({
+            success: false,
+            message: "좋아요 처리 중 에러가 발생했습니다. 나중에 다시 시도해주세요."
+        });
+    }
+};
 
+// 좋아요 삭제
+const deleteLike = async (userId, communityId, res) => {
+    const sql = `DELETE FROM \`like\` 
+                        WHERE cus_id = ? AND community_id = ?`;
+
+    try {
+        const [result] = await pool.query(sql, [userId, communityId]);
+
+        console.log(result);
+
+        res.status(200).send({
+            success: true,
+            message: "좋아요를 삭제했습니다."
+        });
     } catch (error) {
         console.error("좋아요 처리 중 에러 발생:", error);
         res.status(500).send({
@@ -300,4 +309,4 @@ const deleteComment = async (commentId, res) => {
     }
 }
 
-module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, toggleLike, createComment, deleteComment }
+module.exports = { findAll, findById, uploadByUserId, updateById, deleteById, createLike, deleteLike, createComment, deleteComment }

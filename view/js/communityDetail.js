@@ -29,11 +29,16 @@ function renderCommunityDetail(data) {
     postAuthor.textContent = `${author} · ${new Date(date).toLocaleString()}`;
     postContent.textContent = `${content}`;
 
-    // 좋아요 갯수 업데이트(onclick)
+    // 좋아요 아이콘 및 갯수 업데이트
     postMeta.innerHTML = `
-        <i id="like" class="fa-regular fa-heart me-2" ></i>
-        <small class="me-4">좋아요 ${likes}</small>
+        <i id="like" class="${is_like ? 'fa-solid fa-heart' : 'fa-regular fa-heart'} me-2"></i>
+        <small class="me-4">좋아요 <span id="like-count">${likes}</span></small>
     `;
+
+    // 좋아요 클릭 이벤트 등록
+    const likeIcon = document.getElementById("like");
+    likeIcon.addEventListener("click", () => toggleLike(likeIcon, community_id));
+
 
     // 댓글 섹션 렌더링
     const commentSection = document.querySelector(".mb-4 > .card.mb-3.p-3");
@@ -258,4 +263,42 @@ function createReplyForm(parentCommentCard, parentCommentId) {
             alert("답글 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
         }
     });
+}
+
+// 좋아요 토글 함수
+async function toggleLike(likeIcon, communityId) {
+    const isLiked = likeIcon.classList.contains("fa-solid");
+    const endpoint = `/community/${communityId}/like`;
+
+    try {
+        const response = await fetch(endpoint, {
+            method: isLiked ? "DELETE" : "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response.ok) {
+            const likeCountElement = document.getElementById("like-count");
+            let likeCount = parseInt(likeCountElement.textContent, 10);
+
+            if (isLiked) { // 좋아요 취소
+                likeIcon.classList.remove("fa-solid");
+                likeIcon.classList.add("fa-regular");
+                likeCount -= 1;
+            } else { // 좋아요 등록
+                likeIcon.classList.remove("fa-regular");
+                likeIcon.classList.add("fa-solid");
+                likeCount += 1;
+            }
+
+            // 좋아요 수 업데이트
+            likeCountElement.textContent = likeCount;
+        } else {
+            alert("좋아요 처리 중 오류가 발생했습니다.");
+        }
+    } catch (error) {
+        console.error("좋아요 처리 중 오류 발생:", error);
+        alert("좋아요 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    }
 }

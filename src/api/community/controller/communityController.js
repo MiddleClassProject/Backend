@@ -70,12 +70,20 @@ const communityDelete = (req, res) => {
     communityService.deleteById(communityId, req, res);
 }
 
-// 커뮤니티 좋아요 토글 (추가/취소)
-const toggleLike = async (req, res) => {
+// 커뮤니티 좋아요 추가
+const createLike = async (req, res) => {
     const userId = req.cookies.user_id;
     const communityId = req.params.communityId;
 
-    communityService.toggleLike(userId, communityId, res);
+    communityService.createLike(userId, communityId, res);
+};
+
+// 커뮤니티 좋아요 삭제
+const deleteLike = async (req, res) => {
+    const userId = req.cookies.user_id;
+    const communityId = req.params.communityId;
+
+    communityService.deleteLike(userId, communityId, res);
 };
 
 // 커뮤니티 댓글 작성
@@ -106,4 +114,4 @@ const deleteComment = async (req, res) => {
 };
 
 
-module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete, toggleLike, createComment, deleteComment }
+module.exports = { communityList, communityDetail, communityUpload, communityModify, communityDelete, createLike, deleteLike, createComment, deleteComment, }
