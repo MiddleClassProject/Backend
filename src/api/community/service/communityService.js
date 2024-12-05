@@ -3,10 +3,11 @@ const pool = require('../../../../config/databaseSet');
 // 커뮤니티 목록보기 
 const findAll = async (res) => {
 
-    let sql = `SELECT co.community_id, co.community_title, co.community_content, cu.cus_id, cu.id, co.created_at 
+    let sql = `SELECT co.community_id, co.community_title, co.community_content, cu.cus_id, cu.cus_name, co.created_at 
                 FROM community co
                 JOIN cus cu
-                ON co.cus_id = cu.cus_id;`;
+                ON co.cus_id = cu.cus_id
+                ORDER BY co.created_at DESC;`;
 
     try {
         const [communityList] = await pool.query(sql);
@@ -16,7 +17,7 @@ const findAll = async (res) => {
             title: c.community_title,
             content: c.community_content,
             userId: c.cus_id,
-            userName: c.id,
+            userName: c.cus_name,
             date: c.created_at
         }));
 
@@ -67,7 +68,7 @@ function nestComments(comments) {
 
 // 커뮤니티 상세보기 
 const findById = async (userId, communityId, res) => {
-    let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, cu.id, c.community_content, c.created_at,
+    let sql1 = `SELECT c.community_id, c.community_title, c.cus_id, cu.cus_name, c.community_content, c.created_at,
                 CASE WHEN EXISTS (
                         SELECT 1 
                         FROM \`like\` l 
@@ -78,7 +79,7 @@ const findById = async (userId, communityId, res) => {
                 FROM community c
                 JOIN cus cu ON c.cus_id = cu.cus_id
                 WHERE c.community_id = ?;`;
-    let sql2 = `SELECT co.comment_id, co.content, cu.cus_id, cu.id, co.parent_id, co.created_at
+    let sql2 = `SELECT co.comment_id, co.content, cu.cus_id, cu.cus_name, co.parent_id, co.created_at
                 FROM comment co
                 JOIN cus cu ON co.cus_id = cu.cus_id
                 WHERE co.community_id = ?
@@ -107,7 +108,7 @@ const findById = async (userId, communityId, res) => {
             community_id: community.community_id,
             title: community.community_title,
             cus_id: community.cus_id,
-            author: community.id,
+            author: community.cus_name,
             content: community.community_content,
             date: community.created_at,
             is_like: community.is_like,
