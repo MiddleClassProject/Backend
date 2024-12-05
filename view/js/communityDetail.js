@@ -61,7 +61,7 @@ function renderCommunityDetail(data) {
 // 댓글 렌더링 함수
 function renderComments(container, comments) {
     const renderComment = (comment, parentContainer) => {
-        const { comment_id, content, cus_id, id, parent_id, created_at, children } = comment;
+        const { comment_id, content, cus_id, cus_name, parent_id, created_at, children } = comment;
 
         // 댓글 카드 생성
         const commentCard = document.createElement("div");
@@ -69,7 +69,7 @@ function renderComments(container, comments) {
         commentCard.setAttribute("data-comment-id", comment_id); // 댓글 ID 속성 추가
         commentCard.innerHTML = `
                                     <div class="d-flex justify-content-between">
-                                        <h6 class="fw-bold">${id}</h6>
+                                        <h6 class="fw-bold">${cus_name}</h6>
                                     </div>
                                     <p>${content}</p>
                                     <div class="d-flex align-items-center mb-3">
@@ -102,14 +102,14 @@ function renderComments(container, comments) {
 
     // 대댓글 렌더링 함수
     const renderReply = (reply, parentContainer) => {
-        const { comment_id, content, cus_id, id, created_at, children } = reply;
+        const { comment_id, content, cus_id, cus_name, created_at, children } = reply;
 
         // 대댓글 DOM 요소 생성
         const replyElement = document.createElement("div");
         replyElement.className = "reply";
         replyElement.setAttribute("data-comment-id", comment_id);
         replyElement.innerHTML = `
-            <small class="fw-bolder">${id}</small>
+            <small class="fw-bolder">${cus_name}</small>
             <p class="mb-2">${content}</p>
             <div class="d-flex align-items-center mb-2">
                 <small class="text-muted me-4">${new Date(created_at).toLocaleString()}</small>
